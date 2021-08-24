@@ -1,13 +1,13 @@
 package com.ownproject.ServiceOrganizer.Controller;
 
 
-import com.ownproject.ServiceOrganizer.Model.NoteForm;
+import com.ownproject.ServiceOrganizer.Model.RepRequestForm;
 //import com.udacity.jwdnd.course1.cloudstorage.Model.NoteForm;
 //import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
 import com.ownproject.ServiceOrganizer.Model.User;
 //import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 //import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
-import com.ownproject.ServiceOrganizer.Services.NoteService;
+import com.ownproject.ServiceOrganizer.Services.RepReqService;
 import com.ownproject.ServiceOrganizer.Services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,13 +27,13 @@ import javax.servlet.http.HttpServletResponse;
 public class HomeController {
 
     //private FileService fileService;
-    private NoteService noteService;
+    private RepReqService repReqService;
     private UserService userService;
     //private CredentialService credentialService;
 
-    public HomeController( NoteService noteService, UserService userService) {
+    public HomeController(RepReqService repReqService, UserService userService) {
       //  this.fileService = fileService;
-        this.noteService = noteService;
+        this.repReqService = repReqService;
         this.userService = userService;
      //   this.credentialService = credentialService;
     }
@@ -43,8 +43,8 @@ public class HomeController {
         return new StorageForm();
     }*/
     @ModelAttribute
-    public NoteForm noteForm(){
-        return new NoteForm();
+    public RepRequestForm noteForm(){
+        return new RepRequestForm();
     }
   /*  @ModelAttribute
     public CredentialForm credentialForm(){return new CredentialForm();}*/
@@ -53,7 +53,7 @@ public class HomeController {
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
       //  model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
-        model.addAttribute("SavedNotes", noteService.getNotesList(user.getUserId()));
+        model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(user.getUserId()));
      //   model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
         System.out.println("app enters @GetMapping in HomeController");
         return "home";
@@ -63,7 +63,7 @@ public class HomeController {
     public String postHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
      //   model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
-        model.addAttribute("SavedNotes", noteService.getNotesList(user.getUserId()));
+        model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(user.getUserId()));
     //    model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
         return "home";
     }

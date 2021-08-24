@@ -6,10 +6,13 @@ CREATE TABLE IF NOT EXISTS USERS (
   firstname VARCHAR(20),
   lastname VARCHAR(20)
 );
-CREATE TABLE IF NOT EXISTS NOTES (
-    noteid INT PRIMARY KEY auto_increment,
-    notetitle VARCHAR(20),
-    notedescription VARCHAR (1000),
+CREATE TABLE IF NOT EXISTS REPREQUEST (
+    repreqid INT PRIMARY KEY auto_increment,
+    timestamp TIMESTAMP,
+    clientname VARCHAR(20),
+    licenceplate VARCHAR(20),
+    vinnumber VARCHAR(20),
+    defectdescription VARCHAR (1000),
     userid INT,
     foreign key (userid) references USERS(userid)
 );

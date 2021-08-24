@@ -1,9 +1,9 @@
 package com.ownproject.ServiceOrganizer.Controller;
 
-import com.ownproject.ServiceOrganizer.Model.Note;
-import com.ownproject.ServiceOrganizer.Model.NoteForm;
+import com.ownproject.ServiceOrganizer.Model.RepRequest;
+import com.ownproject.ServiceOrganizer.Model.RepRequestForm;
 import com.ownproject.ServiceOrganizer.Model.User;
-import com.ownproject.ServiceOrganizer.Services.NoteService;
+import com.ownproject.ServiceOrganizer.Services.RepReqService;
 import com.ownproject.ServiceOrganizer.Services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,52 +15,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class NoteController {
+public class RepRequestController {
 
-    private NoteService noteService;
+    private RepReqService repReqService;
     private UserService userService;
 
-    public NoteController(NoteService noteService, UserService userService) {
-        this.noteService = noteService;
+    public RepRequestController(RepReqService repReqService, UserService userService) {
+        this.repReqService = repReqService;
         this.userService = userService;
     }
 
 
-    @GetMapping("/note")
-    public String getNoteList(@ModelAttribute("noteForm") NoteForm noteForm, Model model) {
-        model.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+    @GetMapping("/repRequest")
+    public String getNoteList(@ModelAttribute("noteForm") RepRequestForm repRequestForm, Model model) {
+        model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
         return "home";
     }
 
 
-    @PostMapping("/note")
-    public ModelAndView addNote(NoteForm noteForm, Authentication auth, ModelMap attributes) {
+    @PostMapping("/repRequest")
+    public ModelAndView addRepRequest(RepRequestForm repRequestForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
-        if (noteForm.getNoteId() == null) {
-            if(this.noteService.addNote(noteForm, user.getUserId())==1) {
+        if (repRequestForm.getRepReqId() == null) {
+            if(this.repReqService.addRepReq(repRequestForm, user.getUserId())==1) {
                 attributes.addAttribute("noteUploadSuccessBool", true);
                 attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
-                attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+                attributes.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
             }else{
                 attributes.addAttribute("noteUploadErrorBool", true);
                 attributes.addAttribute("noteUploadError", "Something went wrong, please try again!");
             }
         } else{
-            this.noteService.updateNote(noteForm);
+            this.repReqService.updateNote(repRequestForm);
             attributes.addAttribute("noteUploadSuccessBool", true);
             attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
-            attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+            attributes.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
 
         }
         return new ModelAndView("forward:/result", attributes);
     }
 
     @GetMapping("/note-delete")
-    public ModelAndView deleteNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication auth, ModelMap attributes) {
+    public ModelAndView deleteNote(@ModelAttribute("noteForm") RepRequestForm repRequestForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
-        for (Note note : this.noteService.getNotesList(user.getUserId())) {
-            if (note.getNoteTitle().equals(noteForm.getNoteTitle())) {
-                if(this.noteService.deleteNote(note.getNoteTitle(), user.getUserId())==1){
+        for (RepRequest repRequest : this.repReqService.getRepReqList(user.getUserId())) {
+            if (repRequest.getClientName().equals(repRequestForm.getClientName())) {
+                if(this.repReqService.deleteRepReq(repRequest.getClientName(), user.getUserId())==1){
                     attributes.addAttribute("noteUploadSuccessBool",true);
                     attributes.addAttribute("noteUploadSuccess","Your note has been deleted! ");
                 }else{
@@ -70,7 +70,7 @@ public class NoteController {
 
             }
         }
-        attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+        attributes.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
         return new ModelAndView("forward:/result", attributes);
     }
 
