@@ -27,7 +27,7 @@ public class RepRequestController {
 
 
     @GetMapping("/repRequest")
-    public String getNoteList(@ModelAttribute("noteForm") RepRequestForm repRequestForm, Model model) {
+    public String getNoteList(@ModelAttribute("repRequestForm") RepRequestForm repRequestForm, Model model) {
         model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
         return "home";
     }
@@ -55,8 +55,8 @@ public class RepRequestController {
         return new ModelAndView("forward:/result", attributes);
     }
 
-    @GetMapping("/note-delete")
-    public ModelAndView deleteNote(@ModelAttribute("noteForm") RepRequestForm repRequestForm, Authentication auth, ModelMap attributes) {
+    @GetMapping("/repRequest-delete")
+    public ModelAndView deleteNote(@ModelAttribute("repRequestForm") RepRequestForm repRequestForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
         for (RepRequest repRequest : this.repReqService.getRepReqList(user.getUserId())) {
             if (repRequest.getClientName().equals(repRequestForm.getClientName())) {
