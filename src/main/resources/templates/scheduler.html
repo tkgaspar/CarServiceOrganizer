@@ -11,7 +11,14 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
 
+<body class="p-3 mb-2 bg-light text-black">
+<div class="container">
+    <div id="logoutDiv">
+        <form th:action="@{'/logout'}" action="#" method="POST">
+            <button id="logout-button" type="submit" class="btn btn-secondary float-right">Logout</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>
