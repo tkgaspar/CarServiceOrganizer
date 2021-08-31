@@ -20,7 +20,7 @@
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <!--a class="nav-item nav-link active" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="true">Files</a-->
                 <a class="nav-item nav-link" id="nav-notes-tab" data-toggle="tab" href="#nav-notes" role="tab"
-                   aria-controls="nav-notes" aria-selected="false">Repair Requests</a>
+                   aria-controls="nav-notes" aria-selected="true">Repair Requests</a>
                 <!--a class="nav-item nav-link" id="nav-credentials-tab" data-toggle="tab" href="#nav-credentials" role="tab" aria-controls="nav-credentials" aria-selected="false">Credentials</a-->
             </div>
         </nav>
@@ -81,29 +81,43 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="repReqs : ${SavedRepairRequests}">
-                        <td>
-                            <button type="button" class="btn btn-success"
-                                    th:id="'edtbtn of row '+${repReqs.getRepReqId()}"
-                                    th:onclick="javascript: showNoteModal([[${repReqs.getRepReqId()}]],[[${repReqs.getClientName()}]],[[${repReqs.getLicencePlate()}]],[[${repReqs.getVinNumber()}]],[[${repReqs.getDefectDescription()}]])">
-                                Edit
-                            </button>
-                            <a th:id="'dltbtn of row '+${repReqs.getRepReqId()}"
-                               th:href="@{/repRequest-delete(clientName=${repReqs.getClientName()})}"
-                               class="btn btn-danger">Delete</a>
-                        </td>
-                        <th th:id="'timestamp  of row'+${repReqs.getRepReqId()}"
-                            th:text="${repReqs.getTimeStamp()}"></th>
-                        <th th:id="'clientname of row '+${repReqs.getRepReqId()}" scope="row"
-                            th:text="${repReqs.getClientName()}">Example Note Title
-                        </th>
-                        <td th:id="'licenceplate of row'+${repReqs.getRepReqId()}"
-                            th:text="${repReqs.getLicencePlate()}"></td>
-                        <td th:id="'vinnumber of row'+${repReqs.getRepReqId()}" th:text="${repReqs.getVinNumber}"></td>
-                        <td th:id="'defectdesc of row '+${repReqs.getRepReqId()}"
-                            th:text="${repReqs.getDefectDescription()}">Example Note Description
-                        </td>
-                    </tr>
+                    <th:block th:each="repReqs : ${SavedRepairRequests}">
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-success"
+                                        th:id="'edtbtn of row '+${repReqs.getRepReqId()}"
+                                        th:onclick="javascript: showNoteModal([[${repReqs.getRepReqId()}]],[[${repReqs.getClientName()}]],[[${repReqs.getLicencePlate()}]],[[${repReqs.getVinNumber()}]],[[${repReqs.getDefectDescription()}]])">
+                                    Edit
+                                </button>
+                                <a th:id="'dltbtn of row '+${repReqs.getRepReqId()}"
+                                   th:href="@{/repRequest-delete(clientName=${repReqs.getClientName()})}"
+                                   class="btn btn-danger">Delete</a>
+                            </td>
+                            <th th:id="'timestamp  of row'+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getTimeStamp()}"></th>
+                            <th th:id="'clientname of row '+${repReqs.getRepReqId()}" scope="row"
+                                th:text="${repReqs.getClientName()}">Example Note Title
+                            </th>
+                            <td th:id="'licenceplate of row'+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getLicencePlate()}"></td>
+                            <td th:id="'vinnumber of row'+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getVinNumber}"></td>
+                            <td th:id="'defectdesc of row '+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getDefectDescription()}">Example Note Description
+                            </td>
+                        <tr>
+                            <td colspan="6">
+                                <ul class="progressbar">
+                                    <li class="active">Request received</li>
+                                    <li>Parts ordered</li>
+                                    <li>Reparation scheduled</li>
+                                    <li>Currently undergoing reparation</li>
+                                    <li>Reparation finished</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tr>
+                    </th:block>
                     </tbody>
                 </table>
             </div>
@@ -177,6 +191,66 @@
                 $('#defectdescription').val(defectDescription ? defectDescription : '');
                 $('#noteModal').modal('show');
                 }
+
+
+
+
+
+
+
+
 </script>
+<style type="text/css">
+.progressbar{
+    counter-reset: step;
+    }
+    .progressbar li {
+    list-style-type: none;
+    float:left;
+    width:20.00%;
+    position:relative;
+    text-align: center;
+  }
+  .progressbar li:before {
+  content:counter(step);
+  counter-increment:step;
+  width: 30px;
+  height: 30px;
+  line-height:30px;
+  border: 1px solid #ddd;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  border-radius:50px;
+  background-color:white;
+
+  }
+  .progressbar li:after {
+  content: ' ';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  top: 15px;
+  left:-50%;
+  z-index:-1;
+  }
+  .progressbar li:first-child:after{
+  content: none;
+  }
+  .progressbar li.active {
+  color:green;
+  }
+  .progressbar li.active:before {
+  border-color: green;
+  }
+
+
+
+
+
+
+
+</style>
 </body>
 </html>
