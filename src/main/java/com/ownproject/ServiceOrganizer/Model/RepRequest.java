@@ -44,10 +44,6 @@ public class RepRequest {
         return timeStamp;
     }
 
-    /*public void setTimeStamp(Timestamp timeStamp) {
-        this.timeStamp = timeStamp;
-    }*/
-
     public Integer getRepReqId() {
         return repReqId;
     }

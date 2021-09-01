@@ -16,3 +16,12 @@ CREATE TABLE IF NOT EXISTS REPREQUEST (
     userid INT,
     foreign key (userid) references USERS(userid)
 );
+
+    CREATE TABLE IF NOT EXISTS SCHEDULE(
+    scheduleid INT PRIMARY KEY auto_increment,
+    mechanic VARCHAR(20),
+    beginningtime TIME,
+    endtime TIME,
+    reparationdate DATE,
+    foreign key (repreqid) references REPREQUEST (repreqid)
+);

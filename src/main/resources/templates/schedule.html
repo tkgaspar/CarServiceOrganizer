@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <title>Schedule</title>
+</head>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body class="p-3 mb-2 bg-light text-black">
+<div class="container">
+    <div id="logoutDiv">
+        <form th:action="@{'/logout'}" action="#" method="POST">
+            <button id="logout-button" type="submit" class="btn btn-secondary float-right">Logout</button>
+            <button id="show"  type="button" class="btn btn-info float-right"
+                    onclick="showNoteModal()">
+                Schedule a request
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-striped" id="userTable">
+        <thead>
+        <tr>
+            <th style="width: 15%" scope="col">Mechanics</th>
+            <th style="width: 5%" scope="col">8:00</th>
+            <th style="width: 5%" scope="col">8:30</th>
+            <th style="width: 5%" scope="col">9:00</th>
+            <th style="width: 5%" scope="col">9:30</th>
+            <th style="width: 5%" scope="col">10:00</th>
+            <th style="width: 5%" scope="col">10:30</th>
+            <th style="width: 5%" scope="col">11:00</th>
+            <th style="width: 5%" scope="col">11:30</th>
+            <th style="width: 5%" scope="col">12:00</th>
+            <th style="width: 5%" scope="col">12:30</th>
+            <th style="width: 5%" scope="col">13:00</th>
+            <th style="width: 5%" scope="col">13:30</th>
+            <th style="width: 5%" scope="col">14:00</th>
+            <th style="width: 5%" scope="col">14:30</th>
+            <th style="width: 5%" scope="col">15:00</th>
+            <th style="width: 5%" scope="col">15:30</th>
+            <th style="width: 5%" scope="col">16:00</th>
+            <th style="width: 5%" scope="col">16:30</th>
+            <th style="width: 5%" scope="col"></th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:with="mechanic = ${ {'Zsolt','Pika','Balu','Bela','Otto','Zoltan'} }">
+            <tr th:each="tab, mech:${mechanic}">
+                <td th:text="${tab}"></td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+
+
+</div>
+</div>
+
+
+</body>
+</html>
