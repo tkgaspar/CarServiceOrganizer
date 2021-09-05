@@ -6,9 +6,9 @@ import java.time.LocalDate;
 public class ScheduleForm {
     private Integer scheduleId;
     private String mechanic;
-    private Time beginningTime;
-    private Time endTime;
-    private LocalDate reparationDate;
+    private String beginningTime;
+    private String endTime;
+    private Integer duration;
     private Integer repReqId;
 
     public ScheduleForm(){};
@@ -29,29 +29,32 @@ public class ScheduleForm {
         this.scheduleId = scheduleId;
     }
 
-    public Time getBeginningTime() {
-        return beginningTime;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setBeginningTime(Time beginningTime) {
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public String getBeginningTime() {
+        String begTime=this.beginningTime+":00Z";
+        return begTime;
+    }
+
+    public void setBeginningTime(String beginningTime) {
         this.beginningTime = beginningTime;
     }
 
-    public Time getEndTime() {
-        return endTime;
+    public String getEndTime() {
+        String endingTime=this.endTime+":00Z";
+        return endingTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
-    public LocalDate getReparationDate() {
-        return reparationDate;
-    }
-
-    public void setReparationDate(LocalDate reparationDate) {
-        this.reparationDate = reparationDate;
-    }
 
     public Integer getRepReqId() {
         return repReqId;

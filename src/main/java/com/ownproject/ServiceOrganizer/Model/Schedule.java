@@ -1,25 +1,27 @@
 package com.ownproject.ServiceOrganizer.Model;
 
 import java.sql.Time;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Schedule {
     private Integer scheduleId;
     private String mechanic;
-    private Time beginningTime;
-    private Time endTime;
+    private Instant beginningTime;
+    private Instant endTime;
     private LocalDate reparationDate;
     private Integer repreqId;
 
     public Schedule() {
     }
 
-    public Schedule(Integer scheduleId, String mechanic, Time beginningTime, Time endTime, LocalDate reparationDate, Integer repreqId) {
+    public Schedule(Integer scheduleId, String mechanic, Instant beginningTime, Instant endTime, LocalDate reparationDate, Integer repreqId) {
         this.scheduleId = scheduleId;
         this.mechanic = mechanic;
         this.beginningTime = beginningTime;
         this.endTime = endTime;
-        this.reparationDate = reparationDate;
         this.repreqId = repreqId;
     }
 
@@ -39,28 +41,20 @@ public class Schedule {
         this.mechanic = mechanic;
     }
 
-    public Time getBeginningTime() {
+    public Instant getBeginningTime() {
         return beginningTime;
     }
 
-    public void setBeginningTime(Time beginningTime) {
+    public void setBeginningTime(Instant beginningTime) {
         this.beginningTime = beginningTime;
     }
 
-    public Time getEndTime() {
+    public Instant getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(Instant endTime) {
         this.endTime = endTime;
-    }
-
-    public LocalDate getReparationDate() {
-        return reparationDate;
-    }
-
-    public void setReparationDate(LocalDate reparationDate) {
-        this.reparationDate = reparationDate;
     }
 
     public Integer getRepreqId() {

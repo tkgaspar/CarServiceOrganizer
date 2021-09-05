@@ -20,8 +20,20 @@ CREATE TABLE IF NOT EXISTS REPREQUEST (
     CREATE TABLE IF NOT EXISTS SCHEDULE(
     scheduleid INT PRIMARY KEY auto_increment,
     mechanic VARCHAR(20),
-    beginningtime TIME,
-    endtime TIME,
-    reparationdate DATE,
+    beginningtime DATE,
+    endtime DATE,
+    repreqid INT,
     foreign key (repreqid) references REPREQUEST (repreqid)
 );
+
+    CREATE TABLE IF NOT EXISTS MECHANICS(
+    mechid INT PRIMARY KEY auto_increment,
+    mechanic VARCHAR (20)
+);
+
+    INSERT INTO MECHANICS (mechid, mechanic) VALUES (1,'Olti Béla');
+    INSERT INTO MECHANICS (mechid, mechanic) VALUES (2,'Szőcs Domokos');
+    INSERT INTO MECHANICS (mechid, mechanic) VALUES (3,'Péter István');
+    INSERT INTO MECHANICS (mechid, mechanic) VALUES (4,'Muraru Marin');
+    INSERT INTO MECHANICS (mechid, mechanic) VALUES (5,'Tankó Zoltán');
+    INSERT INTO MECHANICS (mechid, mechanic) VALUES (6,'Kész Zoltán');
