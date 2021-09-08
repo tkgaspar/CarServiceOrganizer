@@ -44,8 +44,11 @@ public class ScheduleService {
 
     public Integer addSchedule(ScheduleForm scheduleForm) {
         Schedule schedule = new Schedule();
+        schedule.setMechanic(scheduleForm.getMechanic());
         schedule.setBeginningTime(Instant.parse(scheduleForm.getBeginningTime()));
-        schedule.setEndTime(Instant.parse(scheduleForm.getBeginningTime()).plus(scheduleForm.getDuration(), HOURS));
+        schedule.setEndTime(schedule.getBeginningTime().plus(scheduleForm.getDuration(), HOURS));
+        System.out.println("endtime:"+schedule.getEndTime());
+        System.out.println("dureation: "+scheduleForm.getDuration());
         schedule.setRepreqId(scheduleForm.getRepReqId());
         return this.scheduleMapper.insert(schedule);
     }

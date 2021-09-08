@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS REPREQUEST (
     CREATE TABLE IF NOT EXISTS SCHEDULE(
     scheduleid INT PRIMARY KEY auto_increment,
     mechanic VARCHAR(20),
-    beginningtime DATE,
-    endtime DATE,
+    beginningtime DATETIME,
+    endtime DATETIME,
     repreqid INT,
     foreign key (repreqid) references REPREQUEST (repreqid)
 );
