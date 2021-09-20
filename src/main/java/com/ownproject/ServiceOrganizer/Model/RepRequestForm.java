@@ -7,6 +7,9 @@ public class RepRequestForm {
     private String vinNumber;
     private String licencePlate;
     private Integer userId;
+    private Boolean isPartsOrdered;
+    private Boolean isScheduled;
+    private Boolean isFinished;
 
 
     public RepRequestForm() {
@@ -58,5 +61,29 @@ public class RepRequestForm {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Boolean getPartsOrdered() {
+        return isPartsOrdered;
+    }
+
+    public void setPartsOrdered(Boolean partsOrdered) {
+        isPartsOrdered = partsOrdered;
+    }
+
+    public Boolean getScheduled() {
+        return isScheduled;
+    }
+
+    public void setScheduled(Boolean scheduled) {
+        isScheduled = scheduled;
+    }
+
+    public Boolean getFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(Boolean finished) {
+        isFinished = finished;
     }
 }

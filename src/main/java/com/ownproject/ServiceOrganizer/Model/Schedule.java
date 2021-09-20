@@ -1,23 +1,20 @@
 package com.ownproject.ServiceOrganizer.Model;
 
-import java.sql.Time;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Schedule {
     private Integer scheduleId;
     private String mechanic;
     private Instant beginningTime;
     private Instant endTime;
-    private LocalDate reparationDate;
+    private Integer duration;
     private Integer repreqId;
 
     public Schedule() {
     }
 
-    public Schedule(Integer scheduleId, String mechanic, Instant beginningTime, Instant endTime, LocalDate reparationDate, Integer repreqId) {
+    public Schedule(Integer scheduleId, String mechanic, Instant beginningTime, Instant endTime, Integer repreqId) {
         this.scheduleId = scheduleId;
         this.mechanic = mechanic;
         this.beginningTime = beginningTime;
@@ -35,6 +32,14 @@ public class Schedule {
 
     public String getMechanic() {
         return mechanic;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
     public void setMechanic(String mechanic) {

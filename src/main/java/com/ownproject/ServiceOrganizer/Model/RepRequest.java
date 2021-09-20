@@ -26,18 +26,24 @@ public class RepRequest {
     private String licencePlate;
     private String vinNumber;
     private Integer userId;
+    private Boolean isPartsOrdered;
+    private Boolean isScheduled;
+    private Boolean isFinished;
 
     public RepRequest() {
     }
 
 
-    public RepRequest(Integer repReqId, String clientName, String defectDescription, String licencePlate, String vinNumber, Integer userId) {
+    public RepRequest(Integer repReqId, String clientName, String defectDescription, String licencePlate, String vinNumber, Integer userId, Boolean isPartsOrdered, Boolean isScheduled, Boolean isFinished) {
         this.repReqId = repReqId;
         this.clientName = clientName;
         this.defectDescription = defectDescription;
         this.licencePlate = licencePlate;
         this.vinNumber = vinNumber;
         this.userId = userId;
+        this.isPartsOrdered = isPartsOrdered;
+        this.isScheduled = isScheduled;
+        this.isFinished = isFinished;
     }
 
     public Timestamp getTimeStamp() {
@@ -92,5 +98,27 @@ public class RepRequest {
         this.vinNumber = vinNumber;
     }
 
+    public Boolean getPartsOrdered() {
+        return isPartsOrdered;
+    }
 
+    public void setPartsOrdered(Boolean partsOrdered) {
+        isPartsOrdered = partsOrdered;
+    }
+
+    public Boolean getScheduled() {
+        return isScheduled;
+    }
+
+    public void setScheduled(Boolean scheduled) {
+        isScheduled = scheduled;
+    }
+
+    public Boolean getFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(Boolean finished) {
+        isFinished = finished;
+    }
 }

@@ -21,20 +21,23 @@ public interface ScheduleMapper {
     @Select("SELECT * FROM SCHEDULE where repreqid=#{repReqId}")
     Schedule getScheduleByRepReqId(Integer repReqId);
 
-    @Select("SELECT * FROM SCHEDULE where beginningTime=#{beginningtime}")
-    List<Schedule>getScheduleByDate(Instant beginningTime);
+    @Select("Select * from serviceorganizer.schedule where DATE(beginningtime)=#{date};")
+    List<Schedule>getScheduleByDate(LocalDate date);
+
+    @Select("select distinct cast(serviceorganizer.schedule.beginningtime AS DATE) from schedule;")
+    List<LocalDate>getAllScheduledDates();
 
     @Select("SELECT * FROM MECHANICS")
     List<Mechanic>getAllMechanics();
 
-    @Insert("INSERT into SCHEDULE (scheduleid, mechanic, beginningtime, endtime,  repreqid) VALUES(#{scheduleId}, #{mechanic}, #{beginningTime}, #{endTime},  #{repreqId})")
+    @Insert("INSERT into SCHEDULE (scheduleid, mechanic, beginningtime, duration, endtime,  repreqid) VALUES(#{scheduleId}, #{mechanic}, #{beginningTime},#{duration}, #{endTime},  #{repreqId})")
     @Options(useGeneratedKeys = true, keyProperty="scheduleId")
     int insert(Schedule schedule);
 
     @Delete("DELETE FROM SCHEDULE where scheduleid=#{scheduleId} and mechanic=#{mechanic}")
     int delete(Integer scheduleId,String mechanic);
 
-    @Update ("UPDATE SCHEDULE SET  mechanic=#{mechanic}, beginningtime=#{beginningTime}, endtime=#{endTime},  repreqid=#{repReqId} WHERE scheduleid=#{scheduleId}")
+    @Update ("UPDATE SCHEDULE SET  mechanic=#{mechanic}, beginningtime=#{beginningTime}, duration=#{duration}, endtime=#{endTime},  repreqid=#{repReqId} WHERE scheduleid=#{scheduleId}")
     void updateSchedule(Integer scheduleId, String mechanic, Instant beginningTime, Instant endTime, Integer repreqId);
 
 

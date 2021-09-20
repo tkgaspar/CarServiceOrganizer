@@ -14,7 +14,8 @@ public interface RepRequestMapper {
     @Select(("SELECT * FROM REPREQUEST WHERE clientname=#{clientName} and userid=#{userId}"))
     RepRequest getRepairRequest(String clientName, Integer userId);
 
-    @Insert("INSERT INTO REPREQUEST (timestamp,clientname,licenceplate,vinnumber, defectdescription,userid) VALUES (#{timeStamp},#{clientName},#{licencePlate},#{vinNumber},#{defectDescription},#{userId})")
+    @Insert("INSERT INTO REPREQUEST (timestamp,clientname,licenceplate,vinnumber, defectdescription,userid,ispartsordered,isscheduled,isfinished) " +
+            "VALUES (#{timeStamp},#{clientName},#{licencePlate},#{vinNumber},#{defectDescription},#{userId},#{isPartsOrdered},#{isScheduled},#{isFinished})")
     @Options(useGeneratedKeys = true, keyProperty="repReqId")
     int insert(RepRequest repRequest);
 

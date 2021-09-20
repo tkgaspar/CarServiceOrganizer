@@ -26,16 +26,15 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/home")
 public class HomeController {
 
-    //private FileService fileService;
+
     private RepReqService repReqService;
     private UserService userService;
-    //private CredentialService credentialService;
 
     public HomeController(RepReqService repReqService, UserService userService) {
-      //  this.fileService = fileService;
+
         this.repReqService = repReqService;
         this.userService = userService;
-     //   this.credentialService = credentialService;
+
     }
 
  /*   @ModelAttribute
@@ -52,9 +51,7 @@ public class HomeController {
     @GetMapping()
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-      //  model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
         model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(user.getUserId()));
-     //   model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
         System.out.println("app enters @GetMapping in HomeController");
         return "home";
     }
@@ -62,9 +59,7 @@ public class HomeController {
     @PostMapping
     public String postHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-     //   model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
         model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(user.getUserId()));
-    //    model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
         return "home";
     }
 

@@ -28,6 +28,9 @@ public class RepReqService {
         repRequest.setVinNumber(repReqform.getVinNumber());
         repRequest.setDefectDescription(repReqform.getDefectDescription());
         repRequest.setUserId(userId);
+        repRequest.setPartsOrdered(false);
+        repRequest.setScheduled(false);
+        repRequest.setFinished(false);
         return this.repRequestMapper.insert(repRequest);
     }
 
