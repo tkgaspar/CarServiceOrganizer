@@ -2,6 +2,7 @@ package com.ownproject.ServiceOrganizer.Model;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Schedule {
     private Integer scheduleId;
@@ -11,10 +12,11 @@ public class Schedule {
     private Integer duration;
     private Integer repreqId;
 
+
     public Schedule() {
     }
 
-    public Schedule(Integer scheduleId, String mechanic, Instant beginningTime, Instant endTime, Integer repreqId) {
+    public Schedule(Integer scheduleId, String mechanic, Instant beginningTime, Instant endTime, Integer repreqId,String scheduledHours) {
         this.scheduleId = scheduleId;
         this.mechanic = mechanic;
         this.beginningTime = beginningTime;
@@ -69,4 +71,5 @@ public class Schedule {
     public void setRepreqId(Integer repreqId) {
         this.repreqId = repreqId;
     }
+
 }

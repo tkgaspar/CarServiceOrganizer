@@ -1,23 +1,28 @@
 package com.ownproject.ServiceOrganizer.Services;
 
+import com.ownproject.ServiceOrganizer.Mapper.RepRequestMapper;
 import com.ownproject.ServiceOrganizer.Mapper.ScheduleMapper;
-import com.ownproject.ServiceOrganizer.Model.Mechanic;
-import com.ownproject.ServiceOrganizer.Model.Schedule;
-import com.ownproject.ServiceOrganizer.Model.ScheduleForm;
+import com.ownproject.ServiceOrganizer.Model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.sql.Time;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static java.time.temporal.ChronoUnit.HOURS;
 
 
 @Service
 public class ScheduleService {
+    @Autowired
     private ScheduleMapper scheduleMapper;
+    @Autowired
+    private RepRequestMapper repRequestMapper;
+    @Autowired
+    private RepReqService repReqService;
+
+    private int scheduleCounter;
+
 
     public ScheduleService(ScheduleMapper scheduleMapper) {
         this.scheduleMapper = scheduleMapper;
@@ -43,8 +48,8 @@ public class ScheduleService {
         return this.scheduleMapper.getAllMechanics();
     }
 
-    public List<LocalDate>getAllScheduledDates(){
-        return this.scheduleMapper.getAllScheduledDates().stream().sorted().collect(Collectors.toList());
+    public List<LocalDate> getAllScheduledDates() {
+        return this.scheduleMapper.getAllScheduledDates().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
     }
 
     public Integer addSchedule(ScheduleForm scheduleForm) {
@@ -53,9 +58,10 @@ public class ScheduleService {
         schedule.setBeginningTime(Instant.parse(scheduleForm.getBeginningTime()));
         schedule.setEndTime(schedule.getBeginningTime().plus(scheduleForm.getDuration(), HOURS));
         schedule.setDuration(scheduleForm.getDuration());
-        System.out.println("endtime:" + schedule.getEndTime());
-        System.out.println("duration: " + scheduleForm.getDuration());
         schedule.setRepreqId(scheduleForm.getRepReqId());
+        RepRequest repRequest = this.repReqService.getRepReqById(scheduleForm.getRepReqId());
+        repRequest.setScheduled(true);
+        this.repReqService.setScheduledStatus(scheduleForm.getRepReqId(), true);
         return this.scheduleMapper.insert(schedule);
     }
 
@@ -72,57 +78,64 @@ public class ScheduleService {
         Instant localDate = Instant.parse(date);
         return localDate;
     }
-    public Map<LocalDate,Map<String,List<Boolean>>> allSchedules(){
-       Map allSchedules=new TreeMap<LocalDate,Map<String,List<Boolean>>>();
-        getAllScheduledDates().forEach(i->{
-            allSchedules.put(i,scheduleOfAllMechanicsByDate(getSchedulesByDate(i)));
+
+    public Map<LocalDate, TableFormData> allSchedules() {
+        Map allSchedules = new TreeMap<LocalDate, TableFormData>();
+        getAllScheduledDates().forEach(i -> {
+            allSchedules.put(i, tableData(getSchedulesByDate(i)));
         });
         return allSchedules;
     }
 
-    public Map<String, List<Boolean>> scheduleOfAllMechanicsByDate(List<Schedule> scheduleListOfDate) {
-        Map<String, List<Boolean>> mechanicsWithSchedule = new HashMap<>();
-        for (Schedule schedule : scheduleListOfDate) {
+    public TableFormData tableData(List<Schedule> schedulesOfDate) {
+        TableFormData tableFormData = new TableFormData();
+        Map<String, List<TableCellData>> timeTable = new TreeMap<>();
+        tableFormData.setDateOfTable(LocalDate.ofInstant(schedulesOfDate.get(0).getBeginningTime(), ZoneId.systemDefault()));
+        for (Schedule schedule : schedulesOfDate) {
             allMechanics().forEach(i -> {
-                if (i.getMechanicName().equals(schedule.getMechanic())) {
-                    mechanicsWithSchedule.put(i.getMechanicName(), isScheduled(schedule));
+                List<Schedule> mechByDate = new ArrayList<>();
+                mechByDate.addAll(scheduleMapper.getAllSchedulesOfMechanicByDate(i.getMechanicName(), tableFormData.getDateOfTable()));
+                if (mechByDate.isEmpty()) {
+                    List<TableCellData> emptyList = new ArrayList<TableCellData>(new ArrayList<TableCellData>(Arrays.asList(new TableCellData[18]))); //List created only for being passed to Thymeleaf, defines tablecells classname as not scheduled
+                    Collections.fill(emptyList, new TableCellData(false, "", null));
+                    timeTable.put(i.getMechanicName(), emptyList);
+                } else {
+                    timeTable.put(i.getMechanicName(), cellsOfLine1(mechByDate));
                 }
             });
         }
-        for (Mechanic mech : allMechanics()) {
-            if (!mechanicsWithSchedule.containsKey(mech.getMechanicName())) {
-                List<Boolean> allFalse = new ArrayList<Boolean>(Arrays.asList(new Boolean[18]));
-                Collections.fill(allFalse, Boolean.FALSE);
-                mechanicsWithSchedule.put(mech.getMechanicName(), allFalse);
-            }
-        }
-       /* for (Map.Entry<String, List<Boolean>> entry : mechanicsWithSchedule.entrySet()) {
-            System.out.println("mechanic in map is: " + entry.getKey());
-            entry.getValue().forEach(i -> System.out.println(i.booleanValue()));
-        }*/
-        return mechanicsWithSchedule;
+        tableFormData.setTimeTable(timeTable);
+        return tableFormData;
     }
 
-    public List<Boolean> isScheduled(Schedule sch) {
-        List<Boolean> isScheduled = new ArrayList<>();
+
+
+    public List<TableCellData> cellsOfLine1(List<Schedule> mechByDate) {
+        List<TableCellData> cellsOfLine1 = new ArrayList<TableCellData>(Arrays.asList(new TableCellData[18]));
+        Collections.fill(cellsOfLine1, new TableCellData(false, "", null));
         String[] wH = {"08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"};
         List<String> workingHours = Arrays.asList(wH.clone());
-        for (int i = 0; i < workingHours.size(); i++) {
-            // System.out.println("String workingHours= " + workingHours.get(i) + ", and substring of beginningTime= " + sch.getBeginningTime().toString().substring(11, 16));
-            if (workingHours.get(i).equals(sch.getBeginningTime().toString().substring(11, 16))) {
-
-                for (int j = 0; j <= sch.getDuration() * 2; j++) {
-                    isScheduled.add(true);
+        scheduleCounter = 0;
+        mechByDate.forEach(i -> {
+            for (int j = 0; j < workingHours.size(); j++) {
+                if (workingHours.get(j).equals(i.getBeginningTime().toString().substring(11, 16))) {
+                    cellsOfLine1.set(j, new TableCellData(true, repRequestMapper.getRepReqById(i.getRepreqId()).getDefectDescription(), i.getDuration() * 2));
+                    scheduleCounter++;
                 }
-            } else {
-                isScheduled.add(false);
-
             }
-            //   System.out.println("Mechanic is :"+sch.getMechanic()+", index is: " + (i) + " value of isScheduled at index i = " + isScheduled.get(i));
+        });
+        List<Integer> indexesToBeRemoved = new ArrayList<>();
+        if (scheduleCounter > 0) {
+            for (int i = 0; i < cellsOfLine1.size(); i++) {
+                if (cellsOfLine1.get(i).isScheduled()) {
+                    for (int j = 1; j < cellsOfLine1.get(i).getColspan(); j++) {
+                        indexesToBeRemoved.add(i + j);
+                    }
+                }
+            }
+            indexesToBeRemoved.forEach(x -> cellsOfLine1.set(x, null));
+            cellsOfLine1.removeAll(Collections.singletonList(null));
         }
-        isScheduled = isScheduled.subList(0, 18);
-        return isScheduled;
+        return cellsOfLine1;
     }
-
-
 }

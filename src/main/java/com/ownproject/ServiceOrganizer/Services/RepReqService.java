@@ -46,5 +46,18 @@ public class RepReqService {
         this.repRequestMapper.updateRepairRequest(repRequestForm.getClientName(), repRequestForm.getDefectDescription(), repRequestForm.getRepReqId());
     }
 
+    public void setOrderedStatus(Integer repReqId, Boolean isPartsOrdered){
+        this.repRequestMapper.setOrderedStatus(repReqId,isPartsOrdered);
+    }
+    public void setScheduledStatus(Integer repReqId, Boolean isScheduled){
+        this.repRequestMapper.setScheduledStatus(repReqId,isScheduled);
+    }
+    public void setFinishedStatus(Integer repReqId, Boolean isFinished){
+        this.repRequestMapper.setFinishedStatus(repReqId,isFinished);
+    }
+    public RepRequest getRepReqById(Integer id){
+        return this.repRequestMapper.getRepReqById(id);
+    }
+
 
 }

@@ -57,9 +57,13 @@
         </thead>
         <tbody>
         <th:block>
-            <tr th:each="entryOfDay : ${allEntries.value}">
+            <tr th:each="entryOfDay : ${allEntries.value.getTimeTable()}">
                 <th th:text="${entryOfDay.key}"></th>
-                <td th:each="schedule :${entryOfDay.value}" th:class=" 'scheduled-' +${schedule? 'true' : 'false'}">...</td>
+                <td th:each="schedule :${entryOfDay.value}"
+                    th:class=" 'scheduled-' +${schedule.isScheduled()? 'true' : 'false'}"
+                    th:text="${schedule.getTextOfCell()}"
+                    th:colspan="${schedule.getColspan()}"
+                >...</td>
             </tr>
         </th:block>
         </tbody>
