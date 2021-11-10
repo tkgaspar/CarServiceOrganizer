@@ -31,7 +31,7 @@
             </div>
             <div  th:if="${noteUploadErrorBool}" class="alert alert-danger fill-parent">
                 <h1 class="display-5">Error</h1>
-                <span id="noteError" th:text="${noteUploadError}">Your changes were not saved. Click <a id="noteErrorLink"  th:href="@{/home}">here</a> to continue.</span>
+                <span id="noteError" >You cannot schedule a repair in the past! Your changes were not saved. Click <a id="noteErrorLink"  th:href="@{/schedule}">here</a> to continue.</span>
             </div>
             <div  th:if="${UploadErrorBool}" class="alert alert-danger fill-parent">
                 <h1 class="display-5">Error</h1>

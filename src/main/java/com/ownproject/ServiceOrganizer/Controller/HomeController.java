@@ -51,7 +51,7 @@ public class HomeController {
     @GetMapping()
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-        model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(user.getUserId()));
+        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(user.getUserId()));
         System.out.println("app enters @GetMapping in HomeController");
         return "home";
     }
@@ -59,7 +59,7 @@ public class HomeController {
     @PostMapping
     public String postHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-        model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(user.getUserId()));
+        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(user.getUserId()));
         return "home";
     }
 

@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.time.Instant;
 
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Controller
 public class ScheduleController {
@@ -31,7 +30,7 @@ public class ScheduleController {
 
     @GetMapping("/schedule")
     public String scheduleView(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm, Model model) {
-        model.addAttribute("UnscheduledRequests", repReqService.getRepReqList(01));
+        model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
         model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
         model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
         model.addAttribute("localDate", Instant.now());
@@ -42,25 +41,23 @@ public class ScheduleController {
     @PostMapping("/schedule")
     public ModelAndView scheduleRepair(ScheduleForm scheduleForm, ModelMap attributes) {
         if (scheduleForm.getScheduleId() == null) {
-            if (this.scheduleService.addSchedule(scheduleForm) == 1) {
+            if (Instant.parse(scheduleForm.getBeginningTime()).isBefore(Instant.now())) {
+                attributes.addAttribute("noteUploadErrorBool", true);
+                attributes.addAttribute("noteUploadError", "You cannot schedule a repair in the past! Click ");
+            } else if (this.scheduleService.addSchedule(scheduleForm) == 1) {
                 attributes.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
                 attributes.addAttribute("AvailableMechanics", scheduleService.allMechanics());
-                attributes.addAttribute("UnscheduledRequests", repReqService.getRepReqList(01));
+                attributes.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
                 attributes.addAttribute("ScheduledHours", scheduleService.allSchedules());
-
-          /*  }else{
-                attributes.addAttribute("noteUploadErrorBool", true);
-                attributes.addAttribute("noteUploadError", "Something went wrong, please try again!");
-            */
             }
         } else {
             this.scheduleService.updateSchedule(scheduleForm);
             attributes.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
             attributes.addAttribute("AvailableMechanics", scheduleService.allMechanics());
-            attributes.addAttribute("UnscheduledRequests", repReqService.getRepReqList(1));
-            attributes.addAttribute("ScheduledHours",scheduleService.allSchedules());
+            attributes.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
+            attributes.addAttribute("ScheduledHours", scheduleService.allSchedules());
         }
-        return new ModelAndView("schedule", attributes);
+        return new ModelAndView("forward:/result", attributes);
     }
 
 

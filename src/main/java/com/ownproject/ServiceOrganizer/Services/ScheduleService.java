@@ -119,7 +119,7 @@ public class ScheduleService {
         mechByDate.forEach(i -> {
             for (int j = 0; j < workingHours.size(); j++) {
                 if (workingHours.get(j).equals(i.getBeginningTime().toString().substring(11, 16))) {
-                    cellsOfLine1.set(j, new TableCellData(true, repRequestMapper.getRepReqById(i.getRepreqId()).getDefectDescription(), i.getDuration() * 2));
+                    cellsOfLine1.set(j, new TableCellData(true, repRequestMapper.getRepReqById(i.getRepreqId()).getLicencePlate()+" // "+repRequestMapper.getRepReqById(i.getRepreqId()).getDefectDescription(), i.getDuration() * 2));
                     scheduleCounter++;
                 }
             }

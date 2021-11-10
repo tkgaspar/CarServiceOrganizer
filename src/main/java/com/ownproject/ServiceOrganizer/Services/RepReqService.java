@@ -16,8 +16,11 @@ public class RepReqService {
         this.repRequestMapper = repRequestMapper;
     }
 
-    public List<RepRequest> getRepReqList(Integer userId) {
-        return this.repRequestMapper.getAllRequests(userId);
+    public List<RepRequest> getUnscheduledRepReqList() {
+        return this.repRequestMapper.getAllUnScheduledRequests();
+    }
+    public List<RepRequest> getAllRequestsById(Integer id){
+        return this.repRequestMapper.getAllRequestsByUserId(id);
     }
 
 

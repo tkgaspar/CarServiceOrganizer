@@ -9,7 +9,10 @@ import java.util.List;
 public interface RepRequestMapper {
 
     @Select("SELECT *  from REPREQUEST where userid=#{userId}")
-    List<RepRequest> getAllRequests(Integer userId);
+    List<RepRequest> getAllRequestsByUserId(Integer userId);
+
+    @Select("SELECT *  from REPREQUEST where isscheduled='0'")
+    List<RepRequest> getAllUnScheduledRequests();
 
     @Select("SELECT * FROM REPREQUEST WHERE clientname=#{clientName} and userid=#{userId}")
     RepRequest getRepairRequest(String clientName, Integer userId);

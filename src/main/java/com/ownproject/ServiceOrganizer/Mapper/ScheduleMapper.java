@@ -31,7 +31,7 @@ public interface ScheduleMapper {
     @Select("SELECT * FROM MECHANICS")
     List<Mechanic> getAllMechanics();
 
-    @Insert("INSERT into SCHEDULE (scheduleid, mechanic, beginningtime, duration, endtime,  repreqid) VALUES(#{scheduleId}, #{mechanic}, #{beginningTime},#{duration}, #{endTime},  #{repreqId}})")
+    @Insert("INSERT into SCHEDULE (scheduleid, mechanic, beginningtime, duration, endtime,  repreqid) VALUES(#{scheduleId}, #{mechanic}, #{beginningTime},#{duration}, #{endTime}, #{repreqId})")
     @Options(useGeneratedKeys = true, keyProperty = "scheduleId")
     int insert(Schedule schedule);
 

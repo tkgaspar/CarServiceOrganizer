@@ -28,7 +28,7 @@ public class RepRequestController {
 
     @GetMapping("/repRequest")
     public String getNoteList(@ModelAttribute("repRequestForm") RepRequestForm repRequestForm, Model model) {
-        model.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
+        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(repRequestForm.getUserId()));
         return "home";
     }
 
@@ -40,7 +40,7 @@ public class RepRequestController {
             if(this.repReqService.addRepReq(repRequestForm, user.getUserId())==1) {
                 attributes.addAttribute("noteUploadSuccessBool", true);
                 attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
-                attributes.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
+                attributes.addAttribute("SavedRepairRequests", repReqService.getUnscheduledRepReqList());
             }else{
                 attributes.addAttribute("noteUploadErrorBool", true);
                 attributes.addAttribute("noteUploadError", "Something went wrong, please try again!");
@@ -49,7 +49,7 @@ public class RepRequestController {
             this.repReqService.updateNote(repRequestForm);
             attributes.addAttribute("noteUploadSuccessBool", true);
             attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
-            attributes.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
+            attributes.addAttribute("SavedRepairRequests", repReqService.getUnscheduledRepReqList());
 
         }
         return new ModelAndView("forward:/result", attributes);
@@ -58,7 +58,7 @@ public class RepRequestController {
     @GetMapping("/repRequest-delete")
     public ModelAndView deleteNote(@ModelAttribute("repRequestForm") RepRequestForm repRequestForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
-        for (RepRequest repRequest : this.repReqService.getRepReqList(user.getUserId())) {
+        for (RepRequest repRequest : this.repReqService.getAllRequestsById(user.getUserId())) {
             if (repRequest.getClientName().equals(repRequestForm.getClientName())) {
                 if(this.repReqService.deleteRepReq(repRequest.getClientName(), user.getUserId())==1){
                     attributes.addAttribute("noteUploadSuccessBool",true);
@@ -70,7 +70,7 @@ public class RepRequestController {
 
             }
         }
-        attributes.addAttribute("SavedRepairRequests", repReqService.getRepReqList(repRequestForm.getUserId()));
+        attributes.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(user.getUserId()));
         return new ModelAndView("forward:/result", attributes);
     }
 
