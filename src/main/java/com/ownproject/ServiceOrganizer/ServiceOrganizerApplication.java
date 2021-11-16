@@ -2,6 +2,9 @@ package com.ownproject.ServiceOrganizer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class ServiceOrganizerApplication {
@@ -10,4 +13,8 @@ public class ServiceOrganizerApplication {
 		SpringApplication.run(ServiceOrganizerApplication.class, args);
 	}
 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

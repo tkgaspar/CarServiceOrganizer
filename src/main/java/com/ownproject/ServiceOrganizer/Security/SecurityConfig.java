@@ -1,11 +1,17 @@
 package com.ownproject.ServiceOrganizer.Security;
-
 import com.ownproject.ServiceOrganizer.Services.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 @Configuration
 @EnableWebSecurity
@@ -13,19 +19,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+
     public SecurityConfig(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(this.authenticationService);
+        auth.authenticationProvider(authProvider());
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/signup", "/error/","/css/**", "/js/**").permitAll()
+                .mvcMatchers("/signup", "/error/", "/css/**", "/js/**").permitAll()
+                .mvcMatchers("/schedule").hasAnyAuthority("ADMIN", "CREATOR")
                 .anyRequest().authenticated();
 
         http.formLogin()
@@ -33,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         http.formLogin()
-                .defaultSuccessUrl("/repRequest#nav-notes", true);
+                .defaultSuccessUrl("/home", true);
         /*http.httpBasic()
                 .and()
                 .logout()
@@ -42,6 +65,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")*/
         ;
     }
-
 
 }

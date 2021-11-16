@@ -52,7 +52,7 @@ public class HomeController {
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
         model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(user.getUserId()));
-        System.out.println("app enters @GetMapping in HomeController");
+        user.getRoles().forEach(i-> System.out.println(i.getName()));;
         return "home";
     }
 

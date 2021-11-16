@@ -1,38 +1,39 @@
 package com.ownproject.ServiceOrganizer.Services;
 
 
+import com.ownproject.ServiceOrganizer.Mapper.RoleMapper;
 import com.ownproject.ServiceOrganizer.Mapper.UserMapper;
 import com.ownproject.ServiceOrganizer.Model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
-import java.util.Base64;
 
 @Service
 public class UserService {
-
+    private final RoleMapper roleMapper;
     private final UserMapper userMapper;
-    private final HashService hashService;
 
-    public UserService(UserMapper userMapper, HashService hashService) {
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public UserService(RoleMapper roleMapper, UserMapper userMapper) {
+        this.roleMapper = roleMapper;
         this.userMapper = userMapper;
-        this.hashService = hashService;
     }
 
     public boolean isUsernameAvailable(String username) {
-        return userMapper.getUser(username) == null;
+        return userMapper.getUserByUsername(username) == null;
     }
 
     public int createUser(User user) {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        String encodedSalt = Base64.getEncoder().encodeToString(salt);
-        String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
-        return userMapper.insert(new User(null, user.getUsername(), encodedSalt, hashedPassword, user.getFirstName(), user.getLastName()));
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+
+        return userMapper.insert(new User(null, user.getUsername(), hashedPassword, user.getFirstName(), user.getLastName(), user.isEnabled(), user.getRoles()));
     }
 
     public User getUser(String username) {
-        return userMapper.getUser(username);
+        User user=userMapper.getUserByUsername(username);
+        user.setRoles(roleMapper.getRoles(user.getUserId()));
+        return user;
     }
 }
