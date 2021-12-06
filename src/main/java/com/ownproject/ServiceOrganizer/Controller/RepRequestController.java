@@ -27,9 +27,9 @@ public class RepRequestController {
 
 
     @GetMapping("/repRequest")
-    public String getNoteList(@ModelAttribute("repRequestForm") RepRequestForm repRequestForm, Model model) {
-        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(repRequestForm.getUserId()));
-        return "home";
+    public ModelAndView getNoteList(RepRequestForm repRequestForm, ModelMap attributes) {
+        attributes.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(repRequestForm.getUserId()));
+        return new ModelAndView("home",attributes);
     }
 
 
