@@ -11,21 +11,26 @@ package com.ownproject.ServiceOrganizer.Model;
         foreign key (userid) references USERS(userid)
         );*/
 
+import javax.persistence.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Entity
 public class RepRequest {
-
+    @Id
+    @GeneratedValue
     private Integer repReqId;
-    private static final Timestamp timeStamp=new Timestamp(System.currentTimeMillis());
+    private static final Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
     private String clientName;
     private String defectDescription;
     private String licencePlate;
     private String vinNumber;
-    private Integer userId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private User user;
     private Boolean isPartsOrdered;
     private Boolean isScheduled;
     private Boolean isFinished;
@@ -34,13 +39,13 @@ public class RepRequest {
     }
 
 
-    public RepRequest(Integer repReqId, String clientName, String defectDescription, String licencePlate, String vinNumber, Integer userId, Boolean isPartsOrdered, Boolean isScheduled, Boolean isFinished) {
+    public RepRequest(Integer repReqId, String clientName, String defectDescription, String licencePlate, String vinNumber, User user, Boolean isPartsOrdered, Boolean isScheduled, Boolean isFinished) {
         this.repReqId = repReqId;
         this.clientName = clientName;
         this.defectDescription = defectDescription;
         this.licencePlate = licencePlate;
         this.vinNumber = vinNumber;
-        this.userId = userId;
+        this.user = user;
         this.isPartsOrdered = isPartsOrdered;
         this.isScheduled = isScheduled;
         this.isFinished = isFinished;
@@ -74,12 +79,12 @@ public class RepRequest {
         this.defectDescription = defectDescription;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUserId() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getLicencePlate() {

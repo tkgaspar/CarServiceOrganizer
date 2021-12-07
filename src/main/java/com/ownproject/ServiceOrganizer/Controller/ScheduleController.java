@@ -45,7 +45,7 @@ public class ScheduleController {
             if (Instant.parse(scheduleForm.getBeginningTime()).isBefore(Instant.now())) {
                 attributes.addAttribute("noteUploadErrorBool", true);
                 attributes.addAttribute("noteUploadError", "You cannot schedule a repair in the past! Click ");
-            } else if (this.scheduleService.addSchedule(scheduleForm) == 1) {
+            } else if (!this.scheduleService.addSchedule(scheduleForm).equals(null)) {
                 attributes.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
                 attributes.addAttribute("AvailableMechanics", scheduleService.allMechanics());
                 attributes.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());

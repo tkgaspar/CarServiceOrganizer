@@ -1,12 +1,19 @@
 package com.ownproject.ServiceOrganizer.Model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
-
+@Entity
 public class Schedule {
+    @Id
+    @GeneratedValue
     private Integer scheduleId;
-    private String mechanic;
+    @OneToOne
+    private Mechanic mechanic;
     private Instant beginningTime;
     private Instant endTime;
     private Integer duration;
@@ -16,7 +23,7 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(Integer scheduleId, String mechanic, Instant beginningTime, Instant endTime, Integer repreqId,String scheduledHours) {
+    public Schedule(Integer scheduleId, Mechanic mechanic, Instant beginningTime, Instant endTime, Integer repreqId,String scheduledHours) {
         this.scheduleId = scheduleId;
         this.mechanic = mechanic;
         this.beginningTime = beginningTime;
@@ -32,7 +39,7 @@ public class Schedule {
         this.scheduleId = scheduleId;
     }
 
-    public String getMechanic() {
+    public Mechanic getMechanic() {
         return mechanic;
     }
 
@@ -44,7 +51,7 @@ public class Schedule {
         this.duration = duration;
     }
 
-    public void setMechanic(String mechanic) {
+    public void setMechanic(Mechanic mechanic) {
         this.mechanic = mechanic;
     }
 

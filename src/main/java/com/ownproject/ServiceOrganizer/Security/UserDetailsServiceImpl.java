@@ -1,7 +1,7 @@
 package com.ownproject.ServiceOrganizer.Security;
 
-import com.ownproject.ServiceOrganizer.Mapper.RoleMapper;
-import com.ownproject.ServiceOrganizer.Mapper.UserMapper;
+import com.ownproject.ServiceOrganizer.Mapper.RoleRepository;
+import com.ownproject.ServiceOrganizer.Mapper.UserRepository;
 import com.ownproject.ServiceOrganizer.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserRepository userRepository;
 
     @Autowired
-    private RoleMapper roleMapper;
+    private RoleRepository roleRepository;
 
     @Override
     public MyUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.getUserByUsername(username);
-        user.setRoles(roleMapper.getRoles(user.getUserId()));
+        User user = userRepository.findByUsername(username);
+        user.setRoles(userRepository.findRoleByUserId(user.getUserId()));
 
         if (user == null) {
             throw new UsernameNotFoundException("Could not find user");

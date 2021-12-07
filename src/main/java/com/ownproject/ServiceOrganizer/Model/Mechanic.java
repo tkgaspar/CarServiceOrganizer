@@ -1,17 +1,22 @@
 package com.ownproject.ServiceOrganizer.Model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
-
+@Entity
 public class Mechanic {
+    @Id
+    @GeneratedValue
     private Integer mechId;
-    private String mechanicName;
+    private String mechanic;
 
 
 
-    public Mechanic(Integer mechId, String mechanicName) {
+    public Mechanic(Integer mechId, String mechanic) {
         this.mechId = mechId;
-        this.mechanicName = mechanicName;
+        this.mechanic = mechanic;
     }
 
     public Integer getMechId() {
@@ -23,10 +28,10 @@ public class Mechanic {
     }
 
     public String getMechanicName() {
-        return mechanicName;
+        return mechanic;
     }
 
-    public void setMechanicName(String mechanicName) {
-        this.mechanicName = mechanicName;
+    public void setMechanicName(String mechanic) {
+        this.mechanic = mechanic;
     }
 }

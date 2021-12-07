@@ -1,14 +1,28 @@
 package com.ownproject.ServiceOrganizer.Mapper;
 
 import com.ownproject.ServiceOrganizer.Model.RepRequest;
-import org.apache.ibatis.annotations.*;
+import com.ownproject.ServiceOrganizer.Model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-@Mapper
-public interface RepRequestMapper {
+@Repository
+@Transactional
+public interface RepRequestRepository extends JpaRepository<RepRequest,Integer> {
 
-    @Select("SELECT *  from REPREQUEST where userid=#{userId}")
+    List<RepRequest>findAllByUser(User user);
+
+    List<RepRequest>findAllByIsScheduledIsFalse();
+
+    void deleteById(Integer id);
+
+
+
+
+
+  /*  @Select("SELECT *  from REPREQUEST where userid=#{userId}")
     List<RepRequest> getAllRequestsByUserId(Integer userId);
 
     @Select("SELECT *  from REPREQUEST where isscheduled='0'")
@@ -40,5 +54,5 @@ public interface RepRequestMapper {
     @Update("UPDATE REPREQUEST SET isfinished=#{isFinished} WHERE repreqid=#{repReqId}")
     void setFinishedStatus(Integer repReqId,  Boolean isFinished);
 
-
+*/
 }

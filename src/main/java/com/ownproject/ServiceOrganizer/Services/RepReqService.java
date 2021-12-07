@@ -1,67 +1,78 @@
 package com.ownproject.ServiceOrganizer.Services;
 
-import com.ownproject.ServiceOrganizer.Mapper.RepRequestMapper;
+import com.ownproject.ServiceOrganizer.Mapper.RepRequestRepository;
+import com.ownproject.ServiceOrganizer.Mapper.UserRepository;
 import com.ownproject.ServiceOrganizer.Model.RepRequest;
 import com.ownproject.ServiceOrganizer.Model.RepRequestForm;
+import com.ownproject.ServiceOrganizer.Model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RepReqService {
 
-    private RepRequestMapper repRequestMapper;
+   @Autowired
+    private RepRequestRepository repRequestRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    public RepReqService(RepRequestMapper repRequestMapper) {
-        this.repRequestMapper = repRequestMapper;
+    public RepReqService(RepRequestRepository repRequestRepository) {
+        this.repRequestRepository = repRequestRepository;
     }
+
 
     public List<RepRequest> getUnscheduledRepReqList() {
-        return this.repRequestMapper.getAllUnScheduledRequests();
+        return this.repRequestRepository.findAllByIsScheduledIsFalse();
     }
-    public List<RepRequest> getAllRequestsById(Integer id){
-        return this.repRequestMapper.getAllRequestsByUserId(id);
+
+    public List<RepRequest> getAllRequestsByUserId(Integer userId) {
+        User user = userRepository.findById(userId).get();
+        return this.repRequestRepository.findAllByUser(user);
     }
 
 
-    public Integer addRepReq(RepRequestForm repReqform, Integer userId) {
+    public RepRequest addRepReq(RepRequestForm repReqform, User user) {
         RepRequest repRequest = new RepRequest();
         repRequest.setClientName(repReqform.getClientName());
         repRequest.setLicencePlate(repReqform.getLicencePlate());
         repRequest.setVinNumber(repReqform.getVinNumber());
         repRequest.setDefectDescription(repReqform.getDefectDescription());
-        repRequest.setUserId(userId);
+        repRequest.setUser(user);
         repRequest.setPartsOrdered(false);
         repRequest.setScheduled(false);
         repRequest.setFinished(false);
-        return this.repRequestMapper.insert(repRequest);
+        return this.repRequestRepository.save(repRequest);
     }
 
-    public Integer deleteRepReq(String clientName, Integer userid) {
-      return  this.repRequestMapper.delete(clientName, userid);
+    public void deleteByRepReqId(Integer repreqId) {
+        this.repRequestRepository.deleteById(repreqId);
     }
 
-    public RepRequest getRepReq(String clientName, Integer userId){
-        return this.repRequestMapper.getRepairRequest(clientName, userId);
+    public void delete(RepRequest r) {
+        this.repRequestRepository.delete(r);
     }
 
-    public void updateNote(RepRequestForm repRequestForm){
-        this.repRequestMapper.updateRepairRequest(repRequestForm.getClientName(), repRequestForm.getDefectDescription(), repRequestForm.getRepReqId());
+    public RepRequest findById(Integer id) {
+        return this.repRequestRepository.findById(id).get();
+
     }
 
-    public void setOrderedStatus(Integer repReqId, Boolean isPartsOrdered){
-        this.repRequestMapper.setOrderedStatus(repReqId,isPartsOrdered);
-    }
-    public void setScheduledStatus(Integer repReqId, Boolean isScheduled){
-        this.repRequestMapper.setScheduledStatus(repReqId,isScheduled);
-    }
-    public void setFinishedStatus(Integer repReqId, Boolean isFinished){
-        this.repRequestMapper.setFinishedStatus(repReqId,isFinished);
-    }
-    public RepRequest getRepReqById(Integer id){
-        return this.repRequestMapper.getRepReqById(id);
+    public void save(RepRequest repRequest) {
+
+        this.repRequestRepository.save(repRequest);
     }
 
+    public void save(RepRequestForm r) {
+        RepRequest repRequest = new RepRequest();
+        Optional<RepRequest> repReq = repRequestRepository.findById(r.getRepReqId());
+        if (repReq.isPresent()) {
+            repRequest = repReq.get();
+
+        }
+        repRequestRepository.save(repRequest);
+    }
 
 }

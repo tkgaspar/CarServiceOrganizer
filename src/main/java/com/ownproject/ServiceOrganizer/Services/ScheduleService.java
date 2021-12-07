@@ -1,7 +1,8 @@
 package com.ownproject.ServiceOrganizer.Services;
 
-import com.ownproject.ServiceOrganizer.Mapper.RepRequestMapper;
-import com.ownproject.ServiceOrganizer.Mapper.ScheduleMapper;
+import com.ownproject.ServiceOrganizer.Mapper.MechanicRepository;
+import com.ownproject.ServiceOrganizer.Mapper.RepRequestRepository;
+import com.ownproject.ServiceOrganizer.Mapper.ScheduleRepository;
 import com.ownproject.ServiceOrganizer.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,62 +16,65 @@ import static java.time.temporal.ChronoUnit.HOURS;
 @Service
 public class ScheduleService {
     @Autowired
-    private ScheduleMapper scheduleMapper;
+    private ScheduleRepository scheduleRepository;
     @Autowired
-    private RepRequestMapper repRequestMapper;
+    private RepRequestRepository repRequestRepository;
+    @Autowired
+    private MechanicRepository mechanicRepository;
+
     @Autowired
     private RepReqService repReqService;
 
     private int scheduleCounter;
 
 
-    public ScheduleService(ScheduleMapper scheduleMapper) {
-        this.scheduleMapper = scheduleMapper;
+    public ScheduleService(ScheduleRepository scheduleRepository) {
+        this.scheduleRepository = scheduleRepository;
     }
 
     public List<Schedule> getAllSchedules() {
-        return this.scheduleMapper.getAllSchedules();
+        return this.scheduleRepository.findAll();
     }
 
     public Schedule getScheduleById(Integer scheduleId) {
-        return this.scheduleMapper.getScheduleById(scheduleId);
+        return this.scheduleRepository.findById(scheduleId).get();
     }
 
     public Schedule getScheduleByRepReqId(Integer repReqId) {
-        return this.scheduleMapper.getScheduleByRepReqId(repReqId);
+        return this.scheduleRepository.findByRepReqId(repReqId);
     }
 
     public List<Schedule> getSchedulesByDate(LocalDate reparationDate) {
-        return this.scheduleMapper.getScheduleByDate(reparationDate);
+        return this.scheduleRepository.findByDate(reparationDate);
     }
 
     public List<Mechanic> allMechanics() {
-        return this.scheduleMapper.getAllMechanics();
+        return this.mechanicRepository.findAll();
     }
 
     public List<LocalDate> getAllScheduledDates() {
-        return this.scheduleMapper.getAllScheduledDates().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        return this.scheduleRepository.getAllScheduledDates().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
     }
 
-    public Integer addSchedule(ScheduleForm scheduleForm) {
+    public Schedule addSchedule(ScheduleForm scheduleForm) {
         Schedule schedule = new Schedule();
-        schedule.setMechanic(scheduleForm.getMechanic());
+        schedule.setMechanic(mechanicRepository.findByMechanic(scheduleForm.getMechanic()));
         schedule.setBeginningTime(Instant.parse(scheduleForm.getBeginningTime()));
         schedule.setEndTime(schedule.getBeginningTime().plus(scheduleForm.getDuration(), HOURS));
         schedule.setDuration(scheduleForm.getDuration());
         schedule.setRepreqId(scheduleForm.getRepReqId());
-        RepRequest repRequest = this.repReqService.getRepReqById(scheduleForm.getRepReqId());
+        RepRequest repRequest = this.repReqService.findById(scheduleForm.getRepReqId());
         repRequest.setScheduled(true);
-        this.repReqService.setScheduledStatus(scheduleForm.getRepReqId(), true);
-        return this.scheduleMapper.insert(schedule);
+        this.repReqService.save(repRequest);
+        return this.scheduleRepository.save(schedule);
     }
 
-    public Integer deleteSchedule(Integer scheduleId, String mechanic) {
-        return this.scheduleMapper.delete(scheduleId, mechanic);
+    public void deleteSchedule(Schedule schedule) {
+       this.scheduleRepository.delete(schedule);
     }
 
     public void updateSchedule(ScheduleForm sch) {
-        this.scheduleMapper.updateSchedule(sch.getScheduleId(), sch.getMechanic(), Instant.parse(sch.getBeginningTime()), Instant.parse(sch.getEndTime()), sch.getRepReqId());
+        this.scheduleRepository.updateSchedule(sch.getScheduleId(), sch.getMechanic(), Instant.parse(sch.getBeginningTime()), Instant.parse(sch.getEndTime()), sch.getRepReqId());
     }
 
     public Instant convertToInstant(String date) {
@@ -94,7 +98,7 @@ public class ScheduleService {
         for (Schedule schedule : schedulesOfDate) {
             allMechanics().forEach(i -> {
                 List<Schedule> mechByDate = new ArrayList<>();
-                mechByDate.addAll(scheduleMapper.getAllSchedulesOfMechanicByDate(i.getMechanicName(), tableFormData.getDateOfTable()));
+                mechByDate.addAll(scheduleRepository.findAllByMechanicAndByDate(i.getMechanicName(), tableFormData.getDateOfTable()));
                 if (mechByDate.isEmpty()) {
                     List<TableCellData> emptyList = new ArrayList<TableCellData>(new ArrayList<TableCellData>(Arrays.asList(new TableCellData[18]))); //List created only for being passed to Thymeleaf, defines tablecells classname as not scheduled
                     Collections.fill(emptyList, new TableCellData(false, "", null));
@@ -119,7 +123,7 @@ public class ScheduleService {
         mechByDate.forEach(i -> {
             for (int j = 0; j < workingHours.size(); j++) {
                 if (workingHours.get(j).equals(i.getBeginningTime().toString().substring(11, 16))) {
-                    cellsOfLine1.set(j, new TableCellData(true, repRequestMapper.getRepReqById(i.getRepreqId()).getLicencePlate()+" // "+repRequestMapper.getRepReqById(i.getRepreqId()).getDefectDescription(), i.getDuration() * 2));
+                    cellsOfLine1.set(j, new TableCellData(true, repRequestRepository.findById(i.getRepreqId()).get().getLicencePlate()+" // "+ repRequestRepository.findById(i.getRepreqId()).get().getDefectDescription(), i.getDuration() * 2));
                     scheduleCounter++;
                 }
             }

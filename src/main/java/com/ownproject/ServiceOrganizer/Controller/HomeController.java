@@ -59,7 +59,7 @@ public class HomeController {
     @GetMapping()
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(user.getUserId()));
+        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(user.getUserId()));
         model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
         model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
         model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
@@ -71,7 +71,7 @@ public class HomeController {
     @PostMapping
     public String postHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsById(user.getUserId()));
+        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(user.getUserId()));
         model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
         model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
         model.addAttribute("AvailableMechanics", scheduleService.allMechanics());

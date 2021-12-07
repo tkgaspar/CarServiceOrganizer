@@ -1,9 +1,11 @@
 package com.ownproject.ServiceOrganizer.Model;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+@Entity
+@Table(name = "'users'")
 public class User {
 
     /*
@@ -14,7 +16,8 @@ public class User {
     firstname VARCHAR(20),
     lastname VARCHAR(20)
     */
-
+@Id
+@GeneratedValue
     private Integer userId;
     private String username;
     private String salt;
@@ -22,7 +25,14 @@ public class User {
     private String firstName;
     private String lastName;
     private boolean enabled;
-    private Set<Role> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }

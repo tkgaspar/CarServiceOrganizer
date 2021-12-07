@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class AdminController {
     @GetMapping("/userslist/edit/{id}")
     public String editUser(@PathVariable("id") Integer id, Model model) {
         User user = userService.getUserWithRolesById(id);
-        Set<Role> allRoles = userService.allRoles();
+        Set<Role> allRoles = new HashSet<>(userService.allRoles());
         model.addAttribute("user", user);
         model.addAttribute("allRoles", allRoles);
         return "user_form";
