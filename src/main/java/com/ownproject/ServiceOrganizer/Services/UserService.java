@@ -40,20 +40,20 @@ public class UserService {
 
     public User getUser(String username) {
         User user = userRepository.findByUsername(username);
-        user.setRoles(userRepository.findRoleByUserId(user.getUserId()));
+        user.setRoles(roleRepository.findByUserId(user.getUserId()));
         return user;
     }
 
     public User getUserWithRolesById(Integer id) {
         User user = userRepository.findById(id).get();
-        user.setRoles(userRepository.findRoleByUserId(id));
+        user.setRoles(roleRepository.findByUserId(id));
         return user;
     }
 
     public List<User> getAllUsersWithRoles() {
         List<User> allUsersWithRoles = new ArrayList<>();
         userRepository.findAll().forEach(i -> {
-            i.setRoles(userRepository.findRoleByUserId(i.getUserId()));
+            i.setRoles(roleRepository.findByUserId(i.getUserId()));
             allUsersWithRoles.add(i);
         });
         return allUsersWithRoles;

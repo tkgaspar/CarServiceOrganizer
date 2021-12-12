@@ -4,6 +4,7 @@ import com.ownproject.ServiceOrganizer.Model.Role;
 import com.ownproject.ServiceOrganizer.Model.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -12,8 +13,9 @@ import java.util.Set;
 @Transactional
 @Repository
 public interface RoleRepository extends JpaRepository<Role,Integer> {
-
-
+@Query(value="SELECT roles.role_id, roles.name FROM serviceorganizerjpa.roles INNER JOIN  users_roles ON roles.role_id=users_roles.role_id where users_roles.user_id=user_id",
+nativeQuery = true)
+    Set<Role> findByUserId(Integer userId);
 
   /*  @Select("SELECT roles.role_id, roles.name FROM serviceorganizer.roles INNER JOIN  users_roles ON roles.role_id=users_roles.role_id where users_roles.user_id=#{userId}")
     //Set<Role> getRoles(Integer userId);

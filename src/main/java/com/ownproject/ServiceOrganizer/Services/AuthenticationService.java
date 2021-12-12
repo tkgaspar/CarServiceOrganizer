@@ -40,7 +40,7 @@ public class AuthenticationService implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         User user = userRepository.findByUsername(username);
-        user.setRoles(userRepository.findRoleByUserId(user.getUserId()));
+        user.setRoles(roleRepository.findByUserId(user.getUserId()));
         if (user != null) {
 
             String hashedPassword = passwordEncoder.encode(password);

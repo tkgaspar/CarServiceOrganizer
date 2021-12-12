@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name="reprequest")
 public class RepRequest {
     @Id
     @GeneratedValue

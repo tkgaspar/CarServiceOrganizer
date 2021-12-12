@@ -4,12 +4,15 @@ import com.ownproject.ServiceOrganizer.Mapper.MechanicRepository;
 import com.ownproject.ServiceOrganizer.Mapper.RepRequestRepository;
 import com.ownproject.ServiceOrganizer.Mapper.ScheduleRepository;
 import com.ownproject.ServiceOrganizer.Model.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static java.time.temporal.ChronoUnit.HOURS;
 
 
@@ -41,11 +44,11 @@ public class ScheduleService {
     }
 
     public Schedule getScheduleByRepReqId(Integer repReqId) {
-        return this.scheduleRepository.findByRepReqId(repReqId);
+        return this.scheduleRepository.findByRepreqId(repReqId);
     }
 
     public List<Schedule> getSchedulesByDate(LocalDate reparationDate) {
-        return this.scheduleRepository.findByDate(reparationDate);
+        return this.scheduleRepository.findByDate(/*java.sql.Date.valueOf*/(reparationDate));
     }
 
     public List<Mechanic> allMechanics() {
@@ -53,7 +56,11 @@ public class ScheduleService {
     }
 
     public List<LocalDate> getAllScheduledDates() {
-        return this.scheduleRepository.getAllScheduledDates().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        List<LocalDate> localDates = new ArrayList<>();
+        this.scheduleRepository.getAllScheduledDates().forEach(i -> {
+            localDates.add(i.toLocalDate());
+        });
+        return localDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
     }
 
     public Schedule addSchedule(ScheduleForm scheduleForm) {
@@ -70,11 +77,17 @@ public class ScheduleService {
     }
 
     public void deleteSchedule(Schedule schedule) {
-       this.scheduleRepository.delete(schedule);
+        this.scheduleRepository.delete(schedule);
     }
 
     public void updateSchedule(ScheduleForm sch) {
-        this.scheduleRepository.updateSchedule(sch.getScheduleId(), sch.getMechanic(), Instant.parse(sch.getBeginningTime()), Instant.parse(sch.getEndTime()), sch.getRepReqId());
+        Schedule schedule = new Schedule();
+        Optional<Schedule> optionalSchedule = scheduleRepository.findById(sch.getScheduleId());
+        if (optionalSchedule.isPresent()) {
+            BeanUtils.copyProperties(sch, schedule);
+
+        }
+        this.scheduleRepository.save(schedule);
     }
 
     public Instant convertToInstant(String date) {
@@ -98,7 +111,7 @@ public class ScheduleService {
         for (Schedule schedule : schedulesOfDate) {
             allMechanics().forEach(i -> {
                 List<Schedule> mechByDate = new ArrayList<>();
-                mechByDate.addAll(scheduleRepository.findAllByMechanicAndByDate(i.getMechanicName(), tableFormData.getDateOfTable()));
+                mechByDate.addAll(scheduleRepository.findAllByMechanicAndDate(i.getMechId(), tableFormData.getDateOfTable()));
                 if (mechByDate.isEmpty()) {
                     List<TableCellData> emptyList = new ArrayList<TableCellData>(new ArrayList<TableCellData>(Arrays.asList(new TableCellData[18]))); //List created only for being passed to Thymeleaf, defines tablecells classname as not scheduled
                     Collections.fill(emptyList, new TableCellData(false, "", null));
@@ -113,7 +126,6 @@ public class ScheduleService {
     }
 
 
-
     public List<TableCellData> cellsOfLine1(List<Schedule> mechByDate) {
         List<TableCellData> cellsOfLine1 = new ArrayList<TableCellData>(Arrays.asList(new TableCellData[18]));
         Collections.fill(cellsOfLine1, new TableCellData(false, "", null));
@@ -123,7 +135,7 @@ public class ScheduleService {
         mechByDate.forEach(i -> {
             for (int j = 0; j < workingHours.size(); j++) {
                 if (workingHours.get(j).equals(i.getBeginningTime().toString().substring(11, 16))) {
-                    cellsOfLine1.set(j, new TableCellData(true, repRequestRepository.findById(i.getRepreqId()).get().getLicencePlate()+" // "+ repRequestRepository.findById(i.getRepreqId()).get().getDefectDescription(), i.getDuration() * 2));
+                    cellsOfLine1.set(j, new TableCellData(true, repRequestRepository.findById(i.getRepreqId()).get().getLicencePlate() + " // " + repRequestRepository.findById(i.getRepreqId()).get().getDefectDescription(), i.getDuration() * 2));
                     scheduleCounter++;
                 }
             }

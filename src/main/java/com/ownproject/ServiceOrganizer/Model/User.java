@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 @Entity
-@Table(name = "'users'")
+@Table(name="users")
 public class User {
 
     /*
@@ -16,8 +16,9 @@ public class User {
     firstname VARCHAR(20),
     lastname VARCHAR(20)
     */
-@Id
-@GeneratedValue
+    @Id
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
     private String username;
     private String salt;

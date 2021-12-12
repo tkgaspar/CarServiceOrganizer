@@ -1,13 +1,11 @@
 package com.ownproject.ServiceOrganizer.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 @Entity
+@Table(name="schedule")
 public class Schedule {
     @Id
     @GeneratedValue
