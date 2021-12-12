@@ -10,12 +10,13 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
+
 @Transactional
 @Repository
-public interface RoleRepository extends JpaRepository<Role,Integer> {
-@Query(value="SELECT roles.role_id, roles.name FROM serviceorganizerjpa.roles INNER JOIN  users_roles ON roles.role_id=users_roles.role_id where users_roles.user_id=user_id",
-nativeQuery = true)
-    Set<Role> findByUserId(Integer userId);
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+    @Query(value = "SELECT roles.role_id, roles.name FROM serviceorganizerjpa.roles INNER JOIN  users_roles ON roles.role_id=users_roles.role_id where users_roles.user_id=:userId",
+            nativeQuery = true)
+    Set<Role> findByUserId(@Param("userId") Integer userId);
 
   /*  @Select("SELECT roles.role_id, roles.name FROM serviceorganizer.roles INNER JOIN  users_roles ON roles.role_id=users_roles.role_id where users_roles.user_id=#{userId}")
     //Set<Role> getRoles(Integer userId);
