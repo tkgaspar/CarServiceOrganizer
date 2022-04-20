@@ -25,7 +25,7 @@ public class RepReqService {
 
 
     public List<RepRequest> getUnscheduledRepReqList() {
-        return this.repRequestRepository.findAllByIsScheduledIsFalse();
+        return this.repRequestRepository.findAllByIsScheduledFalse();
     }
 
     public List<RepRequest> getAllRequestsByUserId(Integer userId) {

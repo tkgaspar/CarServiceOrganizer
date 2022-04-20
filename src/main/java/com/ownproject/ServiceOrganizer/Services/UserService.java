@@ -1,6 +1,4 @@
 package com.ownproject.ServiceOrganizer.Services;
-
-
 import com.ownproject.ServiceOrganizer.Mapper.RoleRepository;
 import com.ownproject.ServiceOrganizer.Mapper.UserRepository;
 import com.ownproject.ServiceOrganizer.Model.Role;
@@ -64,6 +62,9 @@ public class UserService {
     }
 
     public void updateUser(User user) {
+        String hashedPassword=passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+        user.setEnabled(true);
         this.userRepository.save(user);
 
     }

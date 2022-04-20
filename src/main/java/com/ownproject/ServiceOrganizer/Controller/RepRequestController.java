@@ -27,9 +27,15 @@ public class RepRequestController {
 
 
     @GetMapping("/repRequest")
-    public ModelAndView getNoteList(RepRequestForm repRequestForm, ModelMap attributes) {
-        attributes.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(repRequestForm.getUserId()));
-        return new ModelAndView("home",attributes);
+    public ModelAndView getNoteList(Authentication auth, RepRequestForm repRequestForm, ModelMap attributes) {
+        User user = this.userService.getUser(auth.getName());
+        if (user.getRoles().contains("ADMIN") || user.getRoles().contains("EDITOR")) {
+            attributes.addAttribute("SavedRepairRequests", repReqService.getUnscheduledRepReqList());
+
+        } else {
+            attributes.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(repRequestForm.getUserId()));
+        }
+        return new ModelAndView("home", attributes);
     }
 
 
@@ -37,15 +43,15 @@ public class RepRequestController {
     public ModelAndView addRepRequest(RepRequestForm repRequestForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
         if (repRequestForm.getRepReqId() == null) {
-            if(!this.repReqService.addRepReq(repRequestForm, user).equals(null)) {
+            if (!this.repReqService.addRepReq(repRequestForm, user).equals(null)) {
                 attributes.addAttribute("noteUploadSuccessBool", true);
                 attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
                 attributes.addAttribute("SavedRepairRequests", repReqService.getUnscheduledRepReqList());
-            }else{
+            } else {
                 attributes.addAttribute("noteUploadErrorBool", true);
                 attributes.addAttribute("noteUploadError", "Something went wrong, please try again!");
             }
-        } else{
+        } else {
             this.repReqService.save(repRequestForm);
             attributes.addAttribute("noteUploadSuccessBool", true);
             attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");

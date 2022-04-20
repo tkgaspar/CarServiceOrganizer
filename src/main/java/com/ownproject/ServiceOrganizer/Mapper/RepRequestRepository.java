@@ -2,7 +2,9 @@ package com.ownproject.ServiceOrganizer.Mapper;
 
 import com.ownproject.ServiceOrganizer.Model.RepRequest;
 import com.ownproject.ServiceOrganizer.Model.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -10,11 +12,12 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface RepRequestRepository extends JpaRepository<RepRequest,Integer> {
+public interface RepRequestRepository extends JpaRepository<RepRequest, Integer> {
 
-    List<RepRequest>findAllByUser(User user);
+    List<RepRequest> findAllByUser(User user);
 
-    List<RepRequest>findAllByIsScheduledIsFalse();
+    @Query(value = "SELECT * FROM serviceorganizer.reprequest where is_scheduled is false;", nativeQuery = true)
+    List<RepRequest> findAllByIsScheduledFalse();
 
     void deleteById(Integer id);
 

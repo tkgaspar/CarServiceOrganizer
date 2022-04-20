@@ -1,10 +1,12 @@
 package com.ownproject.ServiceOrganizer.Model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,6 +72,11 @@ public class Role {
         } else if (!role_id.equals(other.role_id))
             return false;
         return true;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
     }
 }
 

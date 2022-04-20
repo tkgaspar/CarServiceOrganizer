@@ -7,13 +7,8 @@ import com.ownproject.ServiceOrganizer.Services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -36,8 +31,6 @@ public class AdminController {
         User user = userService.getUser(auth.getName());
         model.addAttribute("allUsers", userService.getAllUsersWithRoles());
         model.addAttribute("allRoles", userService.allRoles());
-        System.out.println("Get request reaches controller :admin");
-        userService.allRoles().forEach(i->System.out.println("roles and id.s: "+i.getId()+", and it's name: "+i.getName()));
         return "admin";
     }
 

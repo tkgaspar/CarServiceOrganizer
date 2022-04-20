@@ -1,18 +1,14 @@
 package com.ownproject.ServiceOrganizer.Controller;
 
 
-import com.ownproject.ServiceOrganizer.Model.RepRequest;
 import com.ownproject.ServiceOrganizer.Model.RepRequestForm;
-//import com.udacity.jwdnd.course1.cloudstorage.Model.NoteForm;
-//import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
 import com.ownproject.ServiceOrganizer.Model.ScheduleForm;
 import com.ownproject.ServiceOrganizer.Model.User;
-//import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-//import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.ownproject.ServiceOrganizer.Services.RepReqService;
 import com.ownproject.ServiceOrganizer.Services.ScheduleService;
 import com.ownproject.ServiceOrganizer.Services.UserService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -33,9 +29,9 @@ import java.time.Instant;
 public class HomeController {
 
 
-    private RepReqService repReqService;
-    private UserService userService;
-    private ScheduleService scheduleService;
+    private final RepReqService repReqService;
+    private final UserService userService;
+    private final ScheduleService scheduleService;
 
     public HomeController(RepReqService repReqService, UserService userService, ScheduleService scheduleService) {
 
@@ -59,34 +55,76 @@ public class HomeController {
     @GetMapping()
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(user.getUserId()));
-        model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
-        model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
-        model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
-        model.addAttribute("localDate", Instant.now());
-        model.addAttribute("ScheduledHours", scheduleService.allSchedules());
-        return "home";
-    }
 
-    @PostMapping
-    public String postHomePage(Authentication auth, Model model) {
-        User user = userService.getUser(auth.getName());
-        model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(user.getUserId()));
-        model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
-        model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
-        model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
-        model.addAttribute("localDate", Instant.now());
-        model.addAttribute("ScheduledHours", scheduleService.allSchedules());
-        return "home";
-    }
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))||auth.getAuthorities().contains(new SimpleGrantedAuthority("EDITOR"))){
+            model.addAttribute("SavedRepairRequests", repReqService.getUnscheduledRepReqList());
+            model.addAttribute("localDate", Instant.now());
+            model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
+            model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
+            model.addAttribute("ScheduledHours", scheduleService.allSchedules());
+        } else {
+            model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(user.getUserId()));
+            model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
+            model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
+            model.addAttribute("localDate", Instant.now());
+            model.addAttribute("ScheduledHours", scheduleService.allSchedules());
 
-    @PostMapping("/logout")
-    public String logoutView(HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";
+        return "home";
     }
+
+        @PostMapping
+        public String postHomePage (Authentication auth, Model model){
+            User user = userService.getUser(auth.getName());
+            model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(user.getUserId()));
+            model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
+            model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
+            model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
+            model.addAttribute("localDate", Instant.now());
+            model.addAttribute("ScheduledHours", scheduleService.allSchedules());
+            return "home";
+        }
+
+        @PostMapping("/logout")
+        public String logoutView (HttpServletRequest request, HttpServletResponse response){
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null) {
+                new SecurityContextLogoutHandler().logout(request, response, auth);
+            }
+            return "redirect:/login?logout";
+        }
+
+    @GetMapping("/schedule")
+    public String scheduleView(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm, Model model) {
+        model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
+        model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
+        model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
+        model.addAttribute("localDate", Instant.now());
+        model.addAttribute("ScheduledHours", scheduleService.allSchedules());
+        return "schedule";
+    }
+
+    @PostMapping("/schedule")
+    public ModelAndView scheduleRepair(ScheduleForm scheduleForm, ModelMap attributes) {
+        if (scheduleForm.getScheduleId() == null) {
+            if (Instant.parse(scheduleForm.getBeginningTime()).isBefore(Instant.now())) {
+                attributes.addAttribute("noteUploadErrorBool", true);
+                attributes.addAttribute("noteUploadError", "You cannot schedule a repair in the past! Click ");
+            } else if (!this.scheduleService.addSchedule(scheduleForm).equals(null)) {
+                attributes.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
+                attributes.addAttribute("AvailableMechanics", scheduleService.allMechanics());
+                attributes.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
+                attributes.addAttribute("ScheduledHours", scheduleService.allSchedules());
+            }
+        } else {
+            this.scheduleService.updateSchedule(scheduleForm);
+            attributes.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
+            attributes.addAttribute("AvailableMechanics", scheduleService.allMechanics());
+            attributes.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
+            attributes.addAttribute("ScheduledHours", scheduleService.allSchedules());
+        }
+        return new ModelAndView("forward:/result", attributes);
+    }
+
 
 }

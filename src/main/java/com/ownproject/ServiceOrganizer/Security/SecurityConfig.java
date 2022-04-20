@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/signup", "/error/", "/css/**", "/js/**").permitAll()
                 .mvcMatchers("/schedule").hasAnyAuthority("ADMIN", "CREATOR")
-                .mvcMatchers("/admin").hasAuthority("ADMIN")
+                .mvcMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         http.formLogin()
