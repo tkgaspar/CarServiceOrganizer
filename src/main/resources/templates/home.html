@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="https://www.thymeleaf.org"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
@@ -38,8 +36,6 @@
                         onclick="showScheduleModal()">
                     Schedule a request
                 </button>
-                <!--span sec:authentication="name">Username</span>
-                <span sec:authentication="principal.authorities">Roles</span-->
             </form>
 
             <div class="table-responsive">
@@ -101,12 +97,14 @@
                         </div>
                         <div class="modal-body">
 
-                            <form th:object="${scheduleForm}" th:action="@{/schedule}" action="#" method="POST">
+                            <form th:object="${scheduleForm}" th:action="@{'/schedule'}" action="#" method="POST">
                                 <input type="hidden" name="scheduleId" id="scheduleid">
                                 <div class="form-group">
-                                    <label for="repReqList" class="col-form-label">Select request to be scheduled</label>
-                                    <select th:field="*{repReqId}" type="text" name="repairRequestList" class="form-control"
-                                            id="repReqList">
+                                    <label for="repReqList" class="col-form-label">Select request to be
+                                        scheduled</label>
+                                    <select th:field="*{repReqId}" type="text" name="repairRequestList"
+                                            class="form-control" id="repReqList">
+                                            <option value=" "></option>
                                         <option th:each="requests : ${UnscheduledRequests}"
                                                 th:value="${requests.repReqId}"
                                                 th:text="${requests.licencePlate}+'; '+${requests.defectDescription}">
@@ -122,32 +120,17 @@
                                         </option>
                                     </select>
 
-                                    <label for="datetimeselector" class="col-form-label">Select the date of reparation</label>
+                                    <label for="datetimeselector" class="col-form-label">Select the date of
+                                        reparation</label>
                                     <input th:field="*{beginningTime}" type="datetime-local" id="datetimeselector"
                                            name="dateselector" class="form-control">
-                                    <label for="duration" class="col-form-label">Select estimated repair time in hours</label>
-                                    <input th:field="*{duration}" type="number" min="1" max="30" value="1" id="duration">
+                                    <label for="duration" class="col-form-label">Select estimated repair time in
+                                        hours</label>
+                                    <input th:field="*{duration}" type="number" min="1" max="30" value="1"
+                                           id="duration">
                                     </select>
                                 </div>
 
-                                <!--div class="form-group">
-                                    <label for="licenceplate" class="col-form-label">Licence plate</label>
-                                    <input th:field="*{licencePlate}" type="text" name="licencePlate"
-                                           class="form-control" id="licenceplate" maxlength="20" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="vinnumber" class="col-form-label">VIN number</label>
-                                    <input th:field="*{vinNumber}" type="text" name="vinNumber" class="form-control"
-                                           id="vinnumber" maxlength="20" required>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label for="defectdescription" class="col-form-label">Issue Description</label>
-                                    <textarea th:field="*{defectDescription}" class="form-control"
-                                              name="defectDescription" id="defectdescription" rows="5"
-                                              maxlength="1000" required></textarea>
-                                </div-->
                                 <button id="scheduleSubmit" type="submit" class="d-none"></button>
                             </form>
                         </div>
@@ -159,6 +142,78 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-repRequest" role="tabpanel" aria-labelledby="nav-repRequest-tab">
+            <div>
+                <form th:object="${repRequestForm}" action="#" th:action="@{'/repRequest'}">
+                    <button id="show" style="margin: 0.25em;" type="button" class="btn btn-info float-right"
+                            onclick="showNoteModal()">
+                        + Add a new repair request
+                    </button>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped" id="userTable">
+                    <thead>
+                    <tr>
+                        <th style="width: 15%" scope="col"></th>
+                        <th style="width: 10%" scope="col">Received request at</th>
+                        <th style="width: 10%" scope="col">Client</th>
+                        <th style="width: 10%" scope="col">Licence plate nr.</th>
+                        <th style="width: 15%" scope="col">VIN</th>
+                        <th style="width: 40%" scope="col">Issue</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="repReqs : ${SavedRepairRequests}">
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-success"
+                                        th:id="'edtbtn of row '+${repReqs.getRepReqId()}"
+                                        th:onclick="javascript: showNoteModal([[${repReqs.getRepReqId()}]],[[${repReqs.getClientName()}]],[[${repReqs.getLicencePlate()}]],[[${repReqs.getVinNumber()}]],[[${repReqs.getDefectDescription()}]])">
+                                    Edit
+                                </button>
+                                <a th:id="'dltbtn of row '+${repReqs.getRepReqId()}"
+                                   th:href="@{/repRequest-delete(clientName=${repReqs.getClientName()})}"
+                                   class="btn btn-danger">Delete</a>
+                            </td>
+                            <th th:id="'timestamp  of row'+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getTimeStamp()}"></th>
+                            <th th:id="'clientname of row '+${repReqs.getRepReqId()}" scope="row"
+                                th:text="${repReqs.getClientName()}">Example Note Title
+                            </th>
+                            <td th:id="'licenceplate of row'+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getLicencePlate()}"></td>
+                            <td th:id="'vinnumber of row'+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getVinNumber}"></td>
+                            <td th:id="'defectdesc of row '+${repReqs.getRepReqId()}"
+                                th:text="${repReqs.getDefectDescription()}">Example Note Description
+                            </td>
+                        <tr>
+                            <td colspan="6">
+                                <ul class="progressbar">
+                                    <li class="active">Request received</li>
+                                    <li th:class=" '' +${repReqs.getPartsOrdered()? 'active' : 'inactive'}">Parts
+                                        ordered
+                                    </li>
+                                    <li th:class=" '' +${repReqs.getScheduled()? 'active' : 'inactive'}">Reparation
+                                        scheduled
+                                    </li>
+                                    <li th:class=" '' +${localDate.isAfter(repReqs.getTimeStamp().toInstant())&&repReqs.getScheduled()? 'active' : 'inactive'}">
+                                        Currently undergoing reparation
+                                    </li>
+                                    <li th:class=" '' +${repReqs.getFinished()? 'active' : 'inactive'}">Reparation
+                                        finished
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
             </div>
 
             <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel"

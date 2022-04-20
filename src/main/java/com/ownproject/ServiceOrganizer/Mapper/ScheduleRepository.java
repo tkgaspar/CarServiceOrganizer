@@ -17,17 +17,17 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     void deleteById(Integer id);
+
     Schedule findByRepreqId(Integer repreqId);
 
     @Query(
             value = "SELECT * FROM serviceorganizerjpa.schedule where mechanic_mech_id=:mechId and DATE(beginning_time)=:date",
             nativeQuery = true
     )
-    List<Schedule> findAllByMechanicAndDate(@Param("mechId")Integer mechId,@Param("date") LocalDate date);
+    List<Schedule> findAllByMechanicAndDate(@Param("mechId") Integer mechId, @Param("date") LocalDate date);
 
 
-
-    @Query(value = "Select * from schedule s where DATE(s.beginning_time)=:date",
+    @Query(value = "Select * from serviceorganizerjpa.schedule s where DATE(s.beginning_time)=:date",
             nativeQuery = true)
     List<Schedule> findByDate(@Param("date") LocalDate date);
 

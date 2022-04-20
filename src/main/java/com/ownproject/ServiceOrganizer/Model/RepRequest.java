@@ -11,6 +11,8 @@ package com.ownproject.ServiceOrganizer.Model;
         foreign key (userid) references USERS(userid)
         );*/
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -24,7 +26,8 @@ public class RepRequest {
     @Id
     @GeneratedValue
     private Integer repReqId;
-    private static final Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+    @CreationTimestamp
+    private Timestamp timeStamp;
     private String clientName;
     private String defectDescription;
     private String licencePlate;
@@ -126,5 +129,9 @@ public class RepRequest {
 
     public void setFinished(Boolean finished) {
         isFinished = finished;
+    }
+
+    public void setTimeStamp(Timestamp timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

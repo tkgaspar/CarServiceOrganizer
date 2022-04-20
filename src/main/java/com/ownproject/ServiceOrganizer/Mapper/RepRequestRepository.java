@@ -16,10 +16,12 @@ public interface RepRequestRepository extends JpaRepository<RepRequest, Integer>
 
     List<RepRequest> findAllByUser(User user);
 
-    @Query(value = "SELECT * FROM serviceorganizer.reprequest where is_scheduled is false;", nativeQuery = true)
+    @Query(value = "SELECT * FROM serviceorganizerjpa.reprequest where is_scheduled is false;", nativeQuery = true)
     List<RepRequest> findAllByIsScheduledFalse();
 
     void deleteById(Integer id);
+
+
 
 
 

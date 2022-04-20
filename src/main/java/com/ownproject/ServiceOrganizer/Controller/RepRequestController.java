@@ -12,9 +12,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/repRequest")
 public class RepRequestController {
 
     private RepReqService repReqService;
@@ -26,7 +28,7 @@ public class RepRequestController {
     }
 
 
-    @GetMapping("/repRequest")
+    @GetMapping
     public ModelAndView getNoteList(Authentication auth, RepRequestForm repRequestForm, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
         if (user.getRoles().contains("ADMIN") || user.getRoles().contains("EDITOR")) {
@@ -39,7 +41,7 @@ public class RepRequestController {
     }
 
 
-    @PostMapping("/repRequest")
+    @PostMapping
     public ModelAndView addRepRequest(RepRequestForm repRequestForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
         if (repRequestForm.getRepReqId() == null) {

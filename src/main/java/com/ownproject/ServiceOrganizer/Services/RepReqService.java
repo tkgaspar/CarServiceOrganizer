@@ -8,6 +8,7 @@ import com.ownproject.ServiceOrganizer.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +37,7 @@ public class RepReqService {
 
     public RepRequest addRepReq(RepRequestForm repReqform, User user) {
         RepRequest repRequest = new RepRequest();
+        repRequest.setTimeStamp(new Timestamp(System.currentTimeMillis()));
         repRequest.setClientName(repReqform.getClientName());
         repRequest.setLicencePlate(repReqform.getLicencePlate());
         repRequest.setVinNumber(repReqform.getVinNumber());

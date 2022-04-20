@@ -48,7 +48,7 @@ public class ScheduleService {
     }
 
     public List<Schedule> getSchedulesByDate(LocalDate reparationDate) {
-        return this.scheduleRepository.findByDate(/*java.sql.Date.valueOf*/(reparationDate));
+        return this.scheduleRepository.findByDate(/*java.sql.Date.valueOf*/reparationDate);
     }
 
     public List<Mechanic> allMechanics() {
@@ -113,7 +113,7 @@ public class ScheduleService {
                 List<Schedule> mechByDate = new ArrayList<>();
                 mechByDate.addAll(scheduleRepository.findAllByMechanicAndDate(i.getMechId(), tableFormData.getDateOfTable()));
                 if (mechByDate.isEmpty()) {
-                    List<TableCellData> emptyList = new ArrayList<TableCellData>(new ArrayList<TableCellData>(Arrays.asList(new TableCellData[18]))); //List created only for being passed to Thymeleaf, defines tablecells classname as not scheduled
+                    List<TableCellData> emptyList = new ArrayList<TableCellData>(new ArrayList<TableCellData>(Arrays.asList(new TableCellData[18]))); //List created only to be passed to Thymeleaf, defines tablecells classname as not scheduled
                     Collections.fill(emptyList, new TableCellData(false, "", null));
                     timeTable.put(i.getMechanicName(), emptyList);
                 } else {

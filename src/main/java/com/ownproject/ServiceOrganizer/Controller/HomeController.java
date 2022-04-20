@@ -57,7 +57,8 @@ public class HomeController {
         User user = userService.getUser(auth.getName());
 
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))||auth.getAuthorities().contains(new SimpleGrantedAuthority("EDITOR"))){
-            model.addAttribute("SavedRepairRequests", repReqService.getUnscheduledRepReqList());
+            model.addAttribute("SavedRepairRequests", repReqService.getAllRequestsByUserId(user.getUserId()));
+            model.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
             model.addAttribute("localDate", Instant.now());
             model.addAttribute("ScheduledRepairs", scheduleService.getAllSchedules());
             model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
