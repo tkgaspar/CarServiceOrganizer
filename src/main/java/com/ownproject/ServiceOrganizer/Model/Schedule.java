@@ -1,5 +1,5 @@
 package com.ownproject.ServiceOrganizer.Model;
-
+import com.ownproject.ServiceOrganizer.Model.Mechanic;
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
