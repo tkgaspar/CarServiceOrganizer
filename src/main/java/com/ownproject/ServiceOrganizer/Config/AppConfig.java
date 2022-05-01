@@ -13,7 +13,7 @@ public class AppConfig {
     @Bean
     ViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("WEB-INF/classes/templates/");
+        resolver.setPrefix("WEB-INF/view");
         resolver.setSuffix(".html");
         return resolver;
     }
