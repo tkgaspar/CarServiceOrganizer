@@ -7,9 +7,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+@EnableWebMvc
 @SpringBootApplication
-public class ServiceOrganizerApplication extends SpringBootServletInitializer {
+public class ServiceOrganizerApplication   {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceOrganizerApplication.class, args);
@@ -20,10 +22,7 @@ public class ServiceOrganizerApplication extends SpringBootServletInitializer {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure (SpringApplicationBuilder application) {
-		return application.sources (ServiceOrganizerApplication.class);
-	}
+
 
 
 }
