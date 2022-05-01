@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.time.LocalDate.*;
 import static java.time.temporal.ChronoUnit.HOURS;
 
 
@@ -107,7 +108,8 @@ public class ScheduleService {
     public TableFormData tableData(List<Schedule> schedulesOfDate) {
         TableFormData tableFormData = new TableFormData();
         Map<String, List<TableCellData>> timeTable = new TreeMap<>();
-        tableFormData.setDateOfTable(LocalDate.ofInstant(schedulesOfDate.get(0).getBeginningTime(), ZoneId.systemDefault()));
+        ZonedDateTime zdt= schedulesOfDate.get(0).getBeginningTime().atZone(ZoneId.systemDefault());
+        tableFormData.setDateOfTable(zdt.toLocalDate());
         for (Schedule schedule : schedulesOfDate) {
             allMechanics().forEach(i -> {
                 List<Schedule> mechByDate = new ArrayList<>();
