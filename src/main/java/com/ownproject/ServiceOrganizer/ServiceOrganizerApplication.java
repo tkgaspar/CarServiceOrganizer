@@ -1,5 +1,6 @@
 package com.ownproject.ServiceOrganizer;
 
+import com.ownproject.ServiceOrganizer.Config.SOAppInitializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class ServiceOrganizerApplication   {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ServiceOrganizerApplication.class, args);
+		SpringApplication.run(new Class[]{ServiceOrganizerApplication.class, SOAppInitializer.class}, args);
 	}
 
 	@Bean

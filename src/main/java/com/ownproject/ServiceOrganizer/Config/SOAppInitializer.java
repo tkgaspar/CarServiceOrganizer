@@ -1,5 +1,6 @@
 package com.ownproject.ServiceOrganizer.Config;
 
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -11,20 +12,18 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 
-public class SOAppInitializer implements WebApplicationInitializer {
+@Configuration
+public class SOAppInitializer implements ServletContextInitializer {
 
-    public void onStartup(ServletContext container) throws ServletException {
 
-        AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(AppConfig.class);
-        ctx.setServletContext(container);
+            @Override
+            public void onStartup(ServletContext servletContext) throws ServletException {
+                System.err.println("------------------------------------");
+            }
 
-        ServletRegistration.Dynamic servlet = (ServletRegistration.Dynamic) new DispatcherServlet(ctx);
 
-        servlet.setLoadOnStartup(1);
-        servlet.addMapping("/control");
 
-    }
+
 
   /*  @Override
     protected Class<?>[] getRootConfigClasses() {
