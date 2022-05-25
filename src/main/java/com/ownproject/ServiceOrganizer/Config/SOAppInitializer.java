@@ -4,6 +4,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -12,39 +13,18 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 
-@Configuration
-public class SOAppInitializer implements ServletContextInitializer {
+import org.springframework.web.WebApplicationInitializer;
 
-
-            @Override
-            public void onStartup(ServletContext servletContext) throws ServletException {
-                System.err.println("------------------------------------");
-            }
-
-
-
-
-
-  /*  @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class[0];
-    }
+public class SOAppInitializer implements WebApplicationInitializer {
 
     @Override
-    protected Class<?>[] getServletConfigClasses() {
-        Class [] arr={AppConfig.class};
-        return arr;
+    public void onStartup(ServletContext container) {
+        XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+        appContext.setConfigLocation("/WEB-INF/spring/dispatcher-config.xml");
+
+        ServletRegistration.Dynamic registration = container.addServlet("dispatcher", new DispatcherServlet(appContext));
+        registration.setLoadOnStartup(1);
+        registration.addMapping("/");
     }
 
-    @Override
-    protected String[] getServletMappings() {
-        String[]arr={"/carserviceorganizer.com/*"};
-
-        return arr;
-    }
-
-    @Override
-    protected String getServletName() {
-        return "appservlet";
-    }*/
 }
