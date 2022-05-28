@@ -43,7 +43,7 @@ public class SignupController {
             return "redirect:/login";
         } else {
             model.addAttribute("signupError", signupError);
-            return "signup";
+            return "signup.html";
         }
 
     }

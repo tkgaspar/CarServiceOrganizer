@@ -36,7 +36,7 @@ public class ScheduleController {
         model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
         model.addAttribute("localDate", Instant.now());
         model.addAttribute("ScheduledHours", scheduleService.allSchedules());
-        return "schedule";
+        return "schedule.html";
     }
 
     @PostMapping("/schedule")
@@ -58,7 +58,7 @@ public class ScheduleController {
             attributes.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
             attributes.addAttribute("ScheduledHours", scheduleService.allSchedules());
         }
-        return new ModelAndView("forward:/result", attributes);
+        return new ModelAndView("forward:/result.html", attributes);
     }
 
 

@@ -31,7 +31,7 @@ public class AdminController {
         User user = userService.getUser(auth.getName());
         model.addAttribute("allUsers", userService.getAllUsersWithRoles());
         model.addAttribute("allRoles", userService.allRoles());
-        return "admin";
+        return "admin.html";
     }
 
     @GetMapping("/userslist/edit/{id}")
@@ -40,14 +40,14 @@ public class AdminController {
         Set<Role> allRoles = new HashSet<>(userService.allRoles());
         model.addAttribute("user", user);
         model.addAttribute("allRoles", allRoles);
-        return "user_form";
+        return "user_form.html";
     }
 
 
     @PostMapping("/userslist/save")
     public String saveUser(User user) {
         userService.updateUser(user);
-        return "redirect:/admin";
+        return "redirect:/admin.html";
     }
 
 }

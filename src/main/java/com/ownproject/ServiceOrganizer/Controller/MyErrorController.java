@@ -21,6 +21,6 @@ public class MyErrorController implements ErrorController {
     public String getErrorPage(HttpServletRequest request, Model model) {
         Object status = request.getAttribute("javax.servlet.error.status_code");
         model.addAttribute("PageNotFoundError", true);
-        return "/error";
+        return "/error.html";
     }
 }

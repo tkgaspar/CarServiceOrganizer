@@ -20,8 +20,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Bean
     ViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("WEB-INF/");
-        resolver.setSuffix(".html");
+        resolver.setPrefix("WEB-INF/classes/templates");
         return resolver;
     }
 

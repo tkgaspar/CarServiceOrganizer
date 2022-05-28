@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
         @GetMapping()
         public String loginView() {
-            return "login";
+            return "login.html";
         }
 
 
