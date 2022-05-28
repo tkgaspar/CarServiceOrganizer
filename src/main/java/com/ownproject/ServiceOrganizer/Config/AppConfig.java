@@ -8,12 +8,13 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-
+@EnableWebMvc
+@ComponentScan(basePackages = "com.ownproject.ServiceOrganizer")
 @Configuration
 
 public class AppConfig {
 
-    // Resolve logical view names to .jsp resources in the /WEB-INF/views directory
+    // Resolve logical view names to .html resources in the /WEB-INF/views directory
     @Bean
     ViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
