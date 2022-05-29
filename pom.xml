@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ownproject</groupId>
-    <artifactId>Service-Organizer</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>Service-Organizer</name>
+    <artifactId>ServiceOrganizer</artifactId>
+    <version>1</version>
+    <name>ServiceOrganizer</name>
     <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -96,17 +96,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
@@ -129,6 +118,10 @@
             <type>maven-plugin</type>
         </dependency>
 
+        <dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-devtools</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
