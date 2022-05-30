@@ -25,7 +25,7 @@
 	<!-- Provide a Servlet Name that you want to map -->
 	<servlet-name>sorg-dispatcher</servlet-name>
 	<!-- Provide a url pattern -->
-	<url-pattern>/carserviceorganizer.com/*</url-pattern>
+	<url-pattern>/</url-pattern>
 </servlet-mapping>
 
 </web-app>
