@@ -71,7 +71,7 @@ public class HomeController {
             model.addAttribute("ScheduledHours", scheduleService.allSchedules());
 
         }
-        return "home.html";
+        return "home";
     }
 
         @PostMapping
@@ -83,7 +83,7 @@ public class HomeController {
             model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
             model.addAttribute("localDate", Instant.now());
             model.addAttribute("ScheduledHours", scheduleService.allSchedules());
-            return "home.html";
+            return "home";
         }
 
         @PostMapping("/logout")
@@ -92,7 +92,7 @@ public class HomeController {
             if (auth != null) {
                 new SecurityContextLogoutHandler().logout(request, response, auth);
             }
-            return "redirect:/login?logout.html";
+            return "redirect:/login?logout";
         }
 
     @GetMapping("/schedule")
@@ -102,7 +102,7 @@ public class HomeController {
         model.addAttribute("AvailableMechanics", scheduleService.allMechanics());
         model.addAttribute("localDate", Instant.now());
         model.addAttribute("ScheduledHours", scheduleService.allSchedules());
-        return "schedule.html";
+        return "schedule";
     }
 
     @PostMapping("/schedule")
@@ -124,7 +124,7 @@ public class HomeController {
             attributes.addAttribute("UnscheduledRequests", repReqService.getUnscheduledRepReqList());
             attributes.addAttribute("ScheduledHours", scheduleService.allSchedules());
         }
-        return new ModelAndView("forward:/result.html", attributes);
+        return new ModelAndView("forward:/result", attributes);
     }
 
 
