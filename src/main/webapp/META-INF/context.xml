@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/">
+<Context reloadable="true" privileged="true">
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <Manager pathname="" />
+    <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
 </Context>
