@@ -1,4 +1,4 @@
-package com.ownproject.ServiceOrganizer.Mapper;
+package com.ownproject.ServiceOrganizer.Repository;
 
 import com.ownproject.ServiceOrganizer.Model.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 

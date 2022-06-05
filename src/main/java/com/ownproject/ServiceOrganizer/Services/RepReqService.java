@@ -1,7 +1,7 @@
 package com.ownproject.ServiceOrganizer.Services;
 
-import com.ownproject.ServiceOrganizer.Mapper.RepRequestRepository;
-import com.ownproject.ServiceOrganizer.Mapper.UserRepository;
+import com.ownproject.ServiceOrganizer.Repository.RepRequestRepository;
+import com.ownproject.ServiceOrganizer.Repository.UserRepository;
 import com.ownproject.ServiceOrganizer.Model.RepRequest;
 import com.ownproject.ServiceOrganizer.Model.RepRequestForm;
 import com.ownproject.ServiceOrganizer.Model.User;

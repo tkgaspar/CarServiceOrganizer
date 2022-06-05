@@ -1,8 +1,8 @@
 package com.ownproject.ServiceOrganizer.Services;
 
-import com.ownproject.ServiceOrganizer.Mapper.MechanicRepository;
-import com.ownproject.ServiceOrganizer.Mapper.RepRequestRepository;
-import com.ownproject.ServiceOrganizer.Mapper.ScheduleRepository;
+import com.ownproject.ServiceOrganizer.Repository.MechanicRepository;
+import com.ownproject.ServiceOrganizer.Repository.RepRequestRepository;
+import com.ownproject.ServiceOrganizer.Repository.ScheduleRepository;
 import com.ownproject.ServiceOrganizer.Model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.time.LocalDate.*;
 import static java.time.temporal.ChronoUnit.HOURS;
 
 

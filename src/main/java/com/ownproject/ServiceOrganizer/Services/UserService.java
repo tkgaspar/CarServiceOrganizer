@@ -1,6 +1,6 @@
 package com.ownproject.ServiceOrganizer.Services;
-import com.ownproject.ServiceOrganizer.Mapper.RoleRepository;
-import com.ownproject.ServiceOrganizer.Mapper.UserRepository;
+import com.ownproject.ServiceOrganizer.Repository.RoleRepository;
+import com.ownproject.ServiceOrganizer.Repository.UserRepository;
 import com.ownproject.ServiceOrganizer.Model.Role;
 import com.ownproject.ServiceOrganizer.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;

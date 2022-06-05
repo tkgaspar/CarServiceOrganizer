@@ -1,4 +1,4 @@
-package com.ownproject.ServiceOrganizer.Mapper;
+package com.ownproject.ServiceOrganizer.Repository;
 
 import com.ownproject.ServiceOrganizer.Model.RepRequest;
 import com.ownproject.ServiceOrganizer.Model.User;

@@ -1,4 +1,4 @@
-package com.ownproject.ServiceOrganizer.Mapper;
+package com.ownproject.ServiceOrganizer.Repository;
 
 import com.ownproject.ServiceOrganizer.Model.Mechanic;
 import org.springframework.data.jpa.repository.JpaRepository;
