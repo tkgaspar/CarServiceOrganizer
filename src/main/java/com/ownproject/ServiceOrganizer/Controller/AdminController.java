@@ -15,8 +15,8 @@ import java.util.Set;
 @RequestMapping("/admin")
 public class AdminController {
 
-	
-    private final UserService userService;
+  
+    private UserService userService;
 
     @ModelAttribute
     public UsersListForm usersListForm() {
