@@ -15,7 +15,8 @@ import java.util.Set;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserService userService;
+	
+    private final UserService userService;
 
     @ModelAttribute
     public UsersListForm usersListForm() {
@@ -28,7 +29,6 @@ public class AdminController {
 
     @GetMapping()
     public String getAdminPage(Authentication auth, Model model) {
-        User user = userService.getUser(auth.getName());
         model.addAttribute("allUsers", userService.getAllUsersWithRoles());
         model.addAttribute("allRoles", userService.allRoles());
         return "admin";

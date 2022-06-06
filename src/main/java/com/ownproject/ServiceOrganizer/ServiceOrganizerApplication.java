@@ -7,12 +7,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.ownproject.ServiceOrganizer.Services.UserService;
 
 @SpringBootApplication
-public class ServiceOrganizerApplication   {
+public class ServiceOrganizerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(new Class[]{ServiceOrganizerApplication.class}, args);
+		SpringApplication.run(new Class[] { ServiceOrganizerApplication.class }, args);
 	}
 
 	@Bean
@@ -20,7 +21,6 @@ public class ServiceOrganizerApplication   {
 		return new BCryptPasswordEncoder();
 	}
 
-
-
+	
 
 }

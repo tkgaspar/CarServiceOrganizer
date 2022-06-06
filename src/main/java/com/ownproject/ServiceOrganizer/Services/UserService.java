@@ -11,8 +11,12 @@ import java.util.*;
 
 @Service
 public class UserService {
-    private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
+    
+	@Autowired
+	private RoleRepository roleRepository;
+	
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
