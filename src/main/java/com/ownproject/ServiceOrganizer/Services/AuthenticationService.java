@@ -2,8 +2,10 @@ package com.ownproject.ServiceOrganizer.Services;
 
 import com.ownproject.ServiceOrganizer.Repository.RoleRepository;
 import com.ownproject.ServiceOrganizer.Repository.UserRepository;
+import com.ownproject.ServiceOrganizer.Security.UserDetailsServiceImpl;
 import com.ownproject.ServiceOrganizer.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,7 +18,9 @@ import java.util.ArrayList;
 
 @Service
 public class AuthenticationService implements AuthenticationProvider {
-    private UserRepository userRepository;
+  
+	
+	private UserRepository userRepository;
     private RoleRepository roleRepository;
     // private HashService hashService;
 
@@ -32,7 +36,10 @@ public class AuthenticationService implements AuthenticationProvider {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
+    
+    
+    
+ 
 
 
     @Override

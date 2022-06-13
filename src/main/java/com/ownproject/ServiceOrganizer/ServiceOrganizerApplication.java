@@ -3,13 +3,18 @@ package com.ownproject.ServiceOrganizer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.ownproject.ServiceOrganizer.Repository.*;
 import com.ownproject.ServiceOrganizer.Services.UserService;
 
+
 @SpringBootApplication
+@ComponentScan(basePackages={"com.ownproject.ServiceOrganizer.*"})
 public class ServiceOrganizerApplication {
 
 	public static void main(String[] args) {
@@ -20,7 +25,5 @@ public class ServiceOrganizerApplication {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-	
 
 }

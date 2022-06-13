@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-  
-    private UserService userService;
+ 
+    private final UserService userService;
 
     @ModelAttribute
     public UsersListForm usersListForm() {

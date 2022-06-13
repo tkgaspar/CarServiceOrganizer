@@ -12,11 +12,12 @@ import java.util.*;
 @Service
 public class UserService {
     
-	@Autowired
+	
 	private RoleRepository roleRepository;
 	
-    @Autowired
+   
     private UserRepository userRepository;
+    
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -24,6 +25,16 @@ public class UserService {
     public UserService(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+    }
+    
+    @Autowired
+    public void setRoleRepository(RoleRepository rolerepo) {
+    	this.roleRepository=rolerepo;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository urepo) {
+    	this.userRepository=urepo;
     }
 
     public boolean isUsernameAvailable(String username) {
