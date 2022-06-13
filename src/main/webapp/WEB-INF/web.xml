@@ -14,13 +14,10 @@
 
 	<absolute-ordering />
 
-	<context-param>
-		<param-name>jdbcDriver</param-name>
-		<param-value>com.mysql.cj.jdbc.Driver</param-value>
-	</context-param>
+
 	<context-param>
 		<param-name>databaseUrl</param-name>
-		<param-value>jdbc:mysql://localhost:3306/serviceorganizerjpa?serverTimezone=UTC</param-value>
+		<param-value>jjdbc:mysql://mysqlserver:3306/serviceorganizerjpa?serverTimezone=UTC</param-value>
 	</context-param>
 
 	<servlet>
